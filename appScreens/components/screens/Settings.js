@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {
   SafeAreaView, StyleSheet, Text, View, ScrollView
 } from 'react-native'
@@ -10,13 +10,16 @@ import {
 import InputMinMax from '../elements/InputMinMax'
 
 const Settings = () => {
+
+  const[change, setChange] = useState(true)
+
     return(
       <ScrollView>
         <SafeAreaView style={styles.container} >
           
           <View style={styles.view1}>
           
-            <Switch color="green" value={true} />
+            <Switch onValueChange={()=> {setChange(!change)}} color="green" value={change} />
             
             <Input 
               inputContainerStyle={{ borderColor: '#000'}}
@@ -55,17 +58,14 @@ const Settings = () => {
               <InputMinMax title='Umd. Min' placeholder='%'/>
               <InputMinMax title='Umd. Máx' placeholder='%'/>
             </View>
-          
-            <Button
-            buttonStyle={{ borderColor: "#FFF", width: 150, height: 55, alignSelf: 'center', backgroundColor: '#0B6F3F'}} 
-            containerStyle={{marginBottom: 30}} 
-            title='Save'
-            />
-          
           </View>
-          
-          <Text style={styles.copy} >{'\u00A9'} 2020-2021 OrionSolutions, Inc.</Text>
-        
+          <View style={{paddingTop: 15, flexDirection:'column', justifyContent:'space-between'}}>
+            <Button 
+              buttonStyle={{ borderColor: "#FFF", width: 150, height: 55, alignSelf: 'center', backgroundColor: '#0B6F3F'}}  
+              title='Save'
+            />
+            <Text style={styles.copy} >{'\u00A9'} 2020-2021 OrionSolutions, Inc.</Text>
+          </View>
         </SafeAreaView>
       </ScrollView>
     )
@@ -80,15 +80,15 @@ const styles = StyleSheet.create({
     },
     copy : {
       alignSelf: 'center',
-      color: '#000'
+      color: '#000',
+      margin: 12
     },
     view1 : {
       flex: 1
     },
     view2 : {
       flex: 1,
-      flexDirection:'column', 
-      paddingTop:50
+      flexDirection:'column'
     },
     view3 : {
       flex: 1, 
@@ -98,7 +98,9 @@ const styles = StyleSheet.create({
     view4 : {
       flex: 2, 
       flexDirection:'row', 
-      justifyContent: 'space-evenly'
+      justifyContent: 'space-evenly',
+      paddingTop: 16,
+      paddingBottom: 8
     } 
 })
 

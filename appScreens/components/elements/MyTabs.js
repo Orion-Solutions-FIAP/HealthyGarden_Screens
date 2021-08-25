@@ -5,13 +5,36 @@ import { NavigationContainer } from '@react-navigation/native';
 import Principal from '../screens/Principal';
 import Settings from '../screens/Settings';
 import Password from '../screens/Password';
+import Icon from 'react-native-vector-icons/Feather';
 
 const Tab = createBottomTabNavigator();
 
 function MyTabs() {
   return (
     <NavigationContainer>
-        <Tab.Navigator screenOptions={{tabBarActiveTintColor: '#000', tabBarInactiveTintColor:'#FEFEFE',tabBarStyle:{backgroundColor:'#08B662'}}}>
+        <Tab.Navigator screenOptions={({route})=>({tabBarActiveTintColor: '#000', tabBarInactiveTintColor:'#FEFEFE',tabBarStyle:{backgroundColor:'#08B662'},tabBarIcon: ({ color, size }) => {
+            let iconName;
+
+            switch (route.name) {
+                case 'Home':
+                    iconName = 'home';
+                    break;
+                case 'Histórico':
+                    iconName = 'book-open';
+                    break;
+                case 'Configuração':
+                    iconName = 'settings';
+                    break;
+                case 'Sair':
+                    iconName = 'log-out';
+                    break;
+                default:
+                    iconName = 'circle';
+                    break;
+            }
+
+            return <Icon name={iconName} size={size} color={color} />;
+        }})}>
             <Tab.Screen name="Home" component={Principal} options={{title:'Home',tabBarBadgeStyle:{color:'#FEFEFE'}}}/>
             <Tab.Screen name="Histórico" component={Password} />
             <Tab.Screen name="Configuração" component={Settings} />
