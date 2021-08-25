@@ -32,15 +32,20 @@ const Principal = () => {
   
   client.then(function(client) {
     client.on('message', function(msg) {
-    
       let obj = JSON.parse(msg.data)
-      setTemperature(obj["temperature"])
-      setHumidity(obj["humidity"])
+      console.log(obj)
+
+      if(obj[1] == "temp") setTemperature(obj[0])
+      if(obj[1] == "humidity") setHumidity(obj[0])
+
+      //setTemperature(obj["temperature"])
+      //setHumidity(obj["humidity"])
     });
   
     client.on('connect', function() {
       console.log('connected');
-      client.subscribe('11FkGoi1g8h6cP8', 0);
+      client.subscribe('11FkGoi1g8h6cP8/temp/', 0);
+      client.subscribe('11FkGoi1g8h6cP8/humidity/', 0);
     });
   
     client.connect();
@@ -55,8 +60,9 @@ const Principal = () => {
       <StatusCard containerColor='#9F712C' textSize = {24} statusText={temperature} componentIcon={<ThermometerIcon/>}/>
       <View style={{flexDirection:'row', justifyContent:'center'}}>
         <Button title='Regar' buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer}
-          onPress={() => {client.then(function(client){client.publish('11FkGoi1g8h6cP8/solenoid/', "Activate Solenoid", 0, false);
-})}} />
+          onPress={() => {client.then(function(client){client.publish('11FkGoi1g8h6cP8/solenoid/', "0", 0, false);})}} />
+        <Button title='Regar' buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer}
+          onPress={() => {client.then(function(client){client.publish('11FkGoi1g8h6cP8/solenoid/', "1", 0, false);})}} />
       </View>
     </SafeAreaView>
     
