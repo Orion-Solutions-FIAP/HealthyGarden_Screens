@@ -16,41 +16,40 @@ import PlantIcon from '../elements/PlantIcon'
 import ThermometerIcon from '../elements/ThermometerIcon'
 import MQTT from 'sp-react-native-mqtt';
 
+const client = MQTT.createClient({
+  uri: 'ws://ioticos.org:1883',
+  clientId: 'client1239845y29qdc',
+  auth: true,
+  user:'24iFJYlSQfP4y2A',
+  pass:'2uQJJ3JTE4BAbYA'
+})
 
 const Principal = () => {
-
+  
   let [temperature, setTemperature] = useState(0)
   let [humidity, setHumidity] = useState(0)
 
-  MQTT.createClient({
-    uri: 'ws://ioticos.org:1883',
-    clientId: 'your_client_id',
-    auth: true,
-    user:'24iFJYlSQfP4y2A',
-    pass:'2uQJJ3JTE4BAbYA'
-  }).then(function(client) {
   
-    client.on('closed', function() {
-    });
-  
-    client.on('error', function(msg) {
-    });
-  
+  client.then(function(client) {
     client.on('message', function(msg) {
       let obj = JSON.parse(msg.data)
-      setTemperature(obj["temperature"])
-      setHumidity(obj["humidity"])
+      console.log(obj)
+
+      if(obj[1] == "temp") setTemperature(obj[0])
+      if(obj[1] == "humidity") setHumidity(obj[0])
+
+      //setTemperature(obj["temperature"])
+      //setHumidity(obj["humidity"])
     });
   
     client.on('connect', function() {
       console.log('connected');
-      client.subscribe('11FkGoi1g8h6cP8', 0);
+      client.subscribe('11FkGoi1g8h6cP8/temp/', 0);
+      client.subscribe('11FkGoi1g8h6cP8/humidity/', 0);
     });
   
     client.connect();
-  }).catch(function(err){
-    console.log(err);
-  });
+  })
 
   return(
     <SafeAreaView style={styles.container}>
@@ -60,7 +59,10 @@ const Principal = () => {
       <StatusCard containerColor='#2C6F9F' textSize = {24} statusText={humidity+"%"}  componentIcon={<DropIcon/>}/>
       <StatusCard containerColor='#9F712C' textSize = {24} statusText={temperature} componentIcon={<ThermometerIcon/>}/>
       <View style={{flexDirection:'row', justifyContent:'center'}}>
-        <Button title='Regar' buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer}/>
+        <Button title='Regar' buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer}
+          onPress={() => {client.then(function(client){client.publish('11FkGoi1g8h6cP8/solenoid/', "0", 0, false);})}} />
+        <Button title='Regar' buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer}
+          onPress={() => {client.then(function(client){client.publish('11FkGoi1g8h6cP8/solenoid/', "1", 0, false);})}} />
       </View>
     </SafeAreaView>
     
