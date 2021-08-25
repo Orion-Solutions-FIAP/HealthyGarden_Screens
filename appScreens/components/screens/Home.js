@@ -25,9 +25,9 @@ const Home = (props) => {
       </View>
 
       <View style={styles.downView}>
-        <Button type="outline"  onPress={() => { props.navigation.navigate('Register') }} buttonStyle={{ borderColor: "#FFF", width: 150, height: 55}}   titleStyle={{color:"#FFF"}} title='Register here' />
+        <Button type="outline"  onPress={() => { props.navigation.navigate('register') }} buttonStyle={{ borderColor: "#FFF", width: 150, height: 55}}   titleStyle={{color:"#FFF"}} title='Register here' />
 
-        <Button type="outline" onPress={() => { props.navigation.navigate('Login') }} buttonStyle={{ borderColor: "#FFF", width: 150, height: 55, backgroundColor: '#0B6F3F'}} titleStyle={{color:"#FFF"}}  title='Login' />
+        <Button type="outline" onPress={() => { props.navigation.navigate('login') }} buttonStyle={{ borderColor: "#FFF", width: 150, height: 55, backgroundColor: '#0B6F3F'}} titleStyle={{color:"#FFF"}}  title='Login' />
       </View>
       <Text style={{alignSelf: 'center', color: '#FFF'}} >{'\u00A9'} 2020-2021 OrionSolutions, Inc.</Text>
     </SafeAreaView>

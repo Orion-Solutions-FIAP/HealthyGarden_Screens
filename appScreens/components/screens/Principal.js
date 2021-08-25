@@ -16,27 +16,23 @@ import PlantIcon from '../elements/PlantIcon'
 import ThermometerIcon from '../elements/ThermometerIcon'
 import MQTT from 'sp-react-native-mqtt';
 
+const client = MQTT.createClient({
+  uri: 'ws://ioticos.org:1883',
+  clientId: 'client1239845y29qdc',
+  auth: true,
+  user:'24iFJYlSQfP4y2A',
+  pass:'2uQJJ3JTE4BAbYA'
+})
 
 const Principal = () => {
-
+  
   let [temperature, setTemperature] = useState(0)
   let [humidity, setHumidity] = useState(0)
 
-  MQTT.createClient({
-    uri: 'ws://ioticos.org:1883',
-    clientId: 'your_client_id',
-    auth: true,
-    user:'24iFJYlSQfP4y2A',
-    pass:'2uQJJ3JTE4BAbYA'
-  }).then(function(client) {
   
-    client.on('closed', function() {
-    });
-  
-    client.on('error', function(msg) {
-    });
-  
+  client.then(function(client) {
     client.on('message', function(msg) {
+    
       let obj = JSON.parse(msg.data)
       setTemperature(obj["temperature"])
       setHumidity(obj["humidity"])
@@ -48,9 +44,7 @@ const Principal = () => {
     });
   
     client.connect();
-  }).catch(function(err){
-    console.log(err);
-  });
+  })
 
   return(
     <SafeAreaView style={styles.container}>
@@ -60,7 +54,9 @@ const Principal = () => {
       <StatusCard containerColor='#2C6F9F' textSize = {24} statusText={humidity+"%"}  componentIcon={<DropIcon/>}/>
       <StatusCard containerColor='#9F712C' textSize = {24} statusText={temperature} componentIcon={<ThermometerIcon/>}/>
       <View style={{flexDirection:'row', justifyContent:'center'}}>
-        <Button title='Regar' buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer}/>
+        <Button title='Regar' buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer}
+          onPress={() => {client.then(function(client){client.publish('11FkGoi1g8h6cP8/solenoid/', "Activate Solenoid", 0, false);
+})}} />
       </View>
     </SafeAreaView>
     
