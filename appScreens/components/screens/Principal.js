@@ -59,9 +59,9 @@ const Principal = () => {
       <StatusCard containerColor='#2C6F9F' textSize = {24} statusText={humidity+"%"}  componentIcon={<DropIcon/>}/>
       <StatusCard containerColor='#9F712C' textSize = {24} statusText={temperature} componentIcon={<ThermometerIcon/>}/>
       <View style={{flexDirection:'row', justifyContent:'center'}}>
-        <Button title='Regar' buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer}
+        <Button title='Abre' buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer}
           onPress={() => {client.then(function(client){client.publish('11FkGoi1g8h6cP8/solenoid/', "0", 0, false);})}} />
-        <Button title='Regar' buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer}
+        <Button title='Fecha' buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer}
           onPress={() => {client.then(function(client){client.publish('11FkGoi1g8h6cP8/solenoid/', "1", 0, false);})}} />
       </View>
     </SafeAreaView>
