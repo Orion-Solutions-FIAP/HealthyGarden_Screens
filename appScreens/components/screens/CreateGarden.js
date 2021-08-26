@@ -11,11 +11,8 @@ import {
   Button,
  } from 'react-native-elements'
 
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LeafIcon from '../elements/LeafMenuIcon';
-
-const Stack = createNativeStackNavigator()
 
 const CreateGarden = (props) => {
 
@@ -53,6 +50,7 @@ const CreateGarden = (props) => {
             titleStyle={styles.titleStyle} 
             buttonStyle={styles.buttonStyle}
             onPress={() => {
+              props.navigation.navigate("principal")
               console.log("faij0fai")
             }}/>
         </SafeAreaView>
