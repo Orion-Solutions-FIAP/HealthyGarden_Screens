@@ -1,9 +1,9 @@
 import React from 'react'
-import MyTabs from './components/elements/MyTabs'
+import MyStacks from './components/elements/MyStacks'
 
 const App = ()=>{
   return(
-    <MyTabs/>
+    <MyStacks/>
   )
 }
 
