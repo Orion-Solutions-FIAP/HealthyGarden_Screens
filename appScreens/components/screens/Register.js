@@ -62,7 +62,8 @@ const Register = (props) => {
             Alert.alert("Sucesso", "Usuário cadastrado com sucesso")
             props.navigation.navigate("login")
           })
-          .catch(() => {
+          .catch((err) => {
+            console.log(err)
             Alert.alert("Erro", "Não foi possível cadastrar")
           })
       }

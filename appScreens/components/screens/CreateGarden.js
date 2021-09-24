@@ -37,13 +37,14 @@ const CreateGarden = (props) => {
 
     const registerGarden = () => {
       if(validate()){
-        postGarden(gardenName, gardenDescription, 1)
+        postGarden(gardenName, gardenDescription)
           .then(() => {
             Alert.alert("Sucesso", "Horta cadastrada com sucesso")          
             props.navigation.navigate("principal")
           })
-          .catch(() => {
-            Alert.alert('Erro', "Não foi possível cadastrar a horta")
+          .catch((err) => {
+            console.log(err)
+            Alert.alert('Erro', "Não foi possível cadastrar a horta" + err)
           })
       }
     }

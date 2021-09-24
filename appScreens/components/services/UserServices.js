@@ -1,6 +1,6 @@
 const axios = require("axios")
 
-const URL_USER_API = "https://10.0.0.107:44320/api/User"
+const URL_USER_API = "https://healthygardenapi.azurewebsites.net/api/User"
 
 export const getUser = () => {
     return axios({
