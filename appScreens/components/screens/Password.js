@@ -10,7 +10,7 @@ import {
     Input
 } from 'react-native-elements'
 
-const Password = () => {
+const Password = (props) => {
     
     let [email,setEmail] = useState("")
     return(
@@ -22,11 +22,23 @@ const Password = () => {
                     label="Email" 
                     labelStyle={styles.labelStyle} 
                     inputStyle={styles.inputStyle}
+                    value={email}
                     onChangeText={(value) => {
                     setEmail(value);
                 }}/>
-                <Button title='Enviar Email' buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer}/>
-                <Button title='Retornar ao Login' buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer}/>
+                
+                <Button 
+                  title='Enviar Email' 
+                  buttonStyle={styles.buttonStyle} 
+                  containerStyle={styles.buttonContainer}/>
+
+                <Button 
+                  title='Retornar ao Login' 
+                  buttonStyle={styles.buttonStyle} 
+                  containerStyle={styles.buttonContainer} 
+                  onPress={()=>{
+                    props.navigation.navigate("login")}}/>
+
             </View>
         </SafeAreaView>
     )

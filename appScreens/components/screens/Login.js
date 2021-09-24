@@ -25,6 +25,15 @@ const Login = (props) => {
     let [email, setEmail] = useState('')
     let [password, setPassword] = useState('')
 
+
+    const validate = () => {
+
+      
+
+      return true
+    }
+
+
     return (
 
       <ScrollView style={styles.container}>
@@ -38,11 +47,20 @@ const Login = (props) => {
             labelStyle={styles.labelStyle} 
             inputStyle={styles.inputStyle}/>
 
-          <Input
-            secureTextEntry={true} 
-            label="Senha" 
-            labelStyle={styles.labelStyle} 
-            inputStyle={styles.inputStyle}/>
+          <View>
+            <Input
+              secureTextEntry={true} 
+              label="Senha" 
+              labelStyle={styles.labelStyle} 
+              inputStyle={styles.inputStyle}
+              containerStyle={{marginBottom:-20}}/>
+
+            <TouchableOpacity 
+              style={{paddingLeft:20}}
+              onPress={()=>{props.navigation.navigate("password")}}>
+              <Text style={{color:"#FEFEFE", marginTop:0}}>Esqueci minha senha</Text>
+            </TouchableOpacity>
+          </View>
 
           <Button 
             type="outline" 
@@ -78,7 +96,7 @@ const Login = (props) => {
     inputStyle: {
       borderRadius: 16,
       backgroundColor: 'white',
-      color: "#000",
+      color: "#000"
     },
   
     labelStyle: {
@@ -93,7 +111,8 @@ const Login = (props) => {
       width: 200,
       color: "#fefefe",
       backgroundColor: "#09894C",
-      borderColor: "#FFF"
+      borderColor: "#FFF",
+      marginTop:24
     },
   
     titleStyle: {

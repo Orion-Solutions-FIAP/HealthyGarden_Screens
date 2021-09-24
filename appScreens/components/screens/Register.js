@@ -3,7 +3,8 @@ import {
   View,
   SafeAreaView,
   StyleSheet,
-  ScrollView
+  ScrollView,
+  Alert
 } from 'react-native'
 
 import {
@@ -14,8 +15,11 @@ import {
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LeafIcon from '../elements/LeafMenuIcon';
+import { ScreenStackHeaderBackButtonImage } from 'react-native-screens';
+import { postUser } from '../services/UserServices';
 
 const Stack = createNativeStackNavigator()
+
 
 const Register = (props) => {
 
@@ -24,6 +28,46 @@ const Register = (props) => {
     let [password, setPassword] = useState('')
     let [repeatPassword, setRepeatPassword] = useState('')
 
+    const validate = () => {
+      if(name.trim().length === 0){
+        Alert.alert('Erro', 'Nome não informado')
+        return false
+      }
+
+      const regEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
+      if(!regEmail.test(email)){
+        Alert.alert('Erro', 'Email incorreto')
+        return false
+      }
+
+      if(password.length == 0){
+        Alert.alert('Erro', 'A senha é obrigatória')
+        return false
+      }
+
+      if(password !== repeatPassword){
+        Alert.alert('Erro', 'As senhas precisam ser iguais')
+        return false
+      }
+
+      return true
+
+    }
+
+    const register = () => {
+      if(validate()) {
+        console.log(name,email,password)
+        postUser(name,email,password)
+          .then(() => {
+            Alert.alert("Sucesso", "Usuário cadastrado com sucesso")
+            props.navigation.navigate("login")
+          })
+          .catch((err) => {
+            console.log(err)
+            Alert.alert("Erro", "Não foi possível cadastrar")
+          })
+      }
+    }
 
     return (
 
@@ -69,8 +113,7 @@ const Register = (props) => {
             titleStyle={styles.titleStyle} 
             buttonStyle={styles.buttonStyle}
             onPress={() => {
-              if(password !== repeatPassword) alert('Errado') 
-              else props.navigation.navigate("login")
+              register()
             }}/>
         </SafeAreaView>
       </ScrollView>     
@@ -90,8 +133,6 @@ const Register = (props) => {
       backgroundColor: 'white',
       color: "#000",
     },
-
- 
   
     labelStyle: {
       fontSize: 20,

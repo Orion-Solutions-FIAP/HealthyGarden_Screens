@@ -5,10 +5,14 @@ import {
 
 
 const InputMinMax = (props) =>{
+
+    
+    
+    
     return(
         <View style={styles.view}>
             <Text style={styles.text}>{props.title}</Text>
-            <TextInput keyboardType='numeric' maxLength={3} placeholder={props.placeholder} style={styles.input}/>
+            <TextInput keyboardType='numeric' maxLength={3} placeholder={props.placeholder} style={styles.input} onChangeText={(txt) => {props.onChangeText(txt)}}/>
         </View>
     )
 }
