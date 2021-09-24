@@ -12,6 +12,14 @@ import InputMinMax from '../elements/InputMinMax'
 const Settings = () => {
 
   const[change, setChange] = useState(true)
+  
+  const[name, setName] = useState('')
+  const[gardenName, setGardenName] = useState('')
+  const[gardenDescription, setGardenDescription] = useState('')
+  const[minTemp, setMinTemp] = useState(0)
+  const[maxTemp, setMaxTemp] = useState(0)
+  const[minHum, setMinHum] = useState(0)
+  const[maxHum, setMaxHum] = useState(0)
 
     return(
       <ScrollView>
@@ -26,6 +34,8 @@ const Settings = () => {
               label='Nome'
               labelStyle={{color: '#000'}}
               placeholder='Nome'
+              onChangeText={(txt) => setName(txt)}
+              value={name}
             />
     
             <Input 
@@ -33,6 +43,8 @@ const Settings = () => {
               label='Nome da Horta' 
               labelStyle={{color: '#000'}} 
               placeholder='Nome da Horta'
+              onChangeText={(txt) => setGardenName(txt)}
+              value={gardenName}
             />
     
             <Input 
@@ -42,7 +54,9 @@ const Settings = () => {
               labelStyle={{color: '#000'}}  
               maxLength={200}
               multiline={true} 
-              placeholder='Descrição'  
+              placeholder='Descrição'
+              onChangeText={(txt) => setGardenDescription(txt)}
+              value={gardenDescription} 
             /> 
     
           </View>
@@ -50,13 +64,13 @@ const Settings = () => {
           <View style={styles.view2}>
           
             <View style={styles.view3}>
-              <InputMinMax title='Temp. Min' placeholder='°C' />
-              <InputMinMax title='Temp. Máx' placeholder='°C'/>
+              <InputMinMax title='Temp. Min' placeholder='°C' onChangeText={(txt) => {setMinTemp(txt)}}/>
+              <InputMinMax title='Temp. Máx' placeholder='°C' onChangeText={(txt) => {setMaxTemp(txt)}}/>
             </View>
           
             <View style={styles.view4}>
-              <InputMinMax title='Umd. Min' placeholder='%'/>
-              <InputMinMax title='Umd. Máx' placeholder='%'/>
+              <InputMinMax title='Umd. Min' placeholder='%' onChangeText={(txt) => {setMinHum(txt)}}/>
+              <InputMinMax title='Umd. Máx' placeholder='%' onChangeText={(txt) => {setMaxHum(txt)}}/>
             </View>
           </View>
           <View style={{paddingTop: 15, flexDirection:'column', justifyContent:'space-between'}}>

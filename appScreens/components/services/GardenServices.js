@@ -9,15 +9,34 @@ export const getGarden = () => {
     })
 }
 
-export const postGarden = (gardenName, gardenDescription) => {
+export const postGarden = (userId = 1, name, description) => {
     return axios({
         url: URL_GARDEN_API,
         method: 'post',
         data: {
-            "userId": 1,
+            userId,
             "statusId": 6,
-            "name": gardenName,
-            "description": gardenDescription
+            name,
+            description
         }
+    })
+}
+
+
+export const putGarden = (name, description) => {
+    return axios({
+        url: URL_GARDEN_API,
+        method: 'put',
+        data: {
+            name,
+            description
+        }
+    })
+}
+
+export const deleteGarden = (gardenId) => {
+    return axios({
+        url: URL_SETTING_API + "/" + gardenId,
+        method: 'delete',
     })
 }

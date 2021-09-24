@@ -81,6 +81,14 @@ const CreateGarden = (props) => {
             onPress={() => {
               registerGarden()
             }}/>
+            <Button 
+            type="outline" 
+            title="Create Garden" 
+            titleStyle={styles.titleStyle} 
+            buttonStyle={styles.buttonStyle}
+            onPress={() => {
+              props.navigation.navigate("principal")
+            }}/>
         </SafeAreaView>
       </ScrollView>     
     )

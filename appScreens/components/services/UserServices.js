@@ -20,3 +20,22 @@ export const postUser = (name, email, password) => {
         }
     })
 }
+
+export const putUser = (name, email, password) => {
+    return axios({
+        url: URL_USER_API,
+        method: 'put',
+        data: {
+            name,
+            email,
+            password
+        }
+    })
+}
+
+export const deleteUser = (userId) => {
+    return axios({
+        url: URL_USER_API + '/' + userId,
+        method: 'delete',
+    })
+}
