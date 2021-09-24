@@ -25,6 +25,15 @@ const Login = (props) => {
     let [email, setEmail] = useState('')
     let [password, setPassword] = useState('')
 
+
+    const validate = () => {
+
+      
+
+      return true
+    }
+
+
     return (
 
       <ScrollView style={styles.container}>

@@ -3,7 +3,8 @@ import {
   View,
   SafeAreaView,
   StyleSheet,
-  ScrollView
+  ScrollView,
+  Alert
 } from 'react-native'
 
 import {
@@ -13,12 +14,40 @@ import {
 
 
 import LeafIcon from '../elements/LeafMenuIcon';
+import { postGarden } from '../services/GardenServices';
 
 const CreateGarden = (props) => {
 
     let [gardenName, setGardenName] = useState('')
     let [gardenDescription, setGardenDescription] = useState('')
     
+    const validate = () => {
+      if(gardenName.trim().length < 5){
+        Alert.alert('Erro', 'O nome precisa ter no mínimo 5 caractéres') // =================== VERIFICAR NO BANCO DE DADOS
+        return false
+      }
+
+      if(gardenDescription.trim().length < 10){
+        Alert.alert('Erro', 'A descrição precisa ter pelo menos 10 caractéres') // =================== VERIFICAR NO BANCO DE DADOS
+        return false
+      }
+
+      return true
+    }
+
+    const registerGarden = () => {
+      if(validate()){
+        postGarden(gardenName, gardenDescription, 1)
+          .then(() => {
+            Alert.alert("Sucesso", "Horta cadastrada com sucesso")          
+            props.navigation.navigate("principal")
+          })
+          .catch(() => {
+            Alert.alert('Erro', "Não foi possível cadastrar a horta")
+          })
+      }
+    }
+
     return (
       <ScrollView style={styles.container}>
         <SafeAreaView>
@@ -50,8 +79,7 @@ const CreateGarden = (props) => {
             titleStyle={styles.titleStyle} 
             buttonStyle={styles.buttonStyle}
             onPress={() => {
-              props.navigation.navigate("principal")
-              console.log("faij0fai")
+              registerGarden()
             }}/>
         </SafeAreaView>
       </ScrollView>     
