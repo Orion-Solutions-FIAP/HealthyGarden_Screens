@@ -1,25 +1,24 @@
 import React, {useState} from 'react'
 import {
-  View,
+  Alert,
   SafeAreaView,
-  StyleSheet,
   ScrollView,
-  Alert
+  View
 } from 'react-native'
 
 import {
-  Input,
   Button,
+  Input
  } from 'react-native-elements'
-
 
 import LeafIcon from '../elements/LeafMenuIcon';
 import { postGarden } from '../services/GardenServices';
+import Styles from '../elements/Styles';
 
 const CreateGarden = (props) => {
 
-    let [gardenName, setGardenName] = useState('')
-    let [gardenDescription, setGardenDescription] = useState('')
+    const [gardenName, setGardenName] = useState('')
+    const [gardenDescription, setGardenDescription] = useState('')
     
     const validate = () => {
       if(gardenName.trim().length < 5){
@@ -50,85 +49,49 @@ const CreateGarden = (props) => {
     }
 
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView style={Styles.createGardenContainer}>
+
         <SafeAreaView>
-          <View style={{alignSelf: 'center', paddingBottom: 16}}>
+
+          <View style={Styles.createGardenIcon}>
             <LeafIcon />
           </View>
 
           <Input 
+            inputStyle={Styles.createGardenInput}
             label="Garden's name" 
-            labelStyle={styles.labelStyle} 
-            inputStyle={styles.inputStyle}
-            onChangeText={(value) => {
-                setGardenName(value)
-            }}/>
+            labelStyle={Styles.createGardenLabel} 
+            onChangeText={(value) => setGardenName(value)}
+          />
             
           <Input 
+            inputStyle={Styles.createGardenInput}
+            label="Description" 
+            labelStyle={Styles.createGardenLabel} 
             multiline={true} 
             numberOfLines={7} 
-            label="Description" 
-            labelStyle={styles.labelStyle} 
-            inputStyle={styles.inputStyle}
-            onChangeText={(value) => {
-                setGardenDescription(value)
-            }}/>
+            onChangeText={(value) => setGardenDescription(value)}
+          />
 
           <Button 
-            type="outline" 
+            buttonStyle={Styles.createGardenButton}
+            onPress={() => registerGarden()}
             title="Create Garden" 
-            titleStyle={styles.titleStyle} 
-            buttonStyle={styles.buttonStyle}
-            onPress={() => {
-              registerGarden()
-            }}/>
+            titleStyle={Styles.createGardenButtonTitle} 
+            type="outline" 
+          />
             <Button 
-            type="outline" 
+            buttonStyle={Styles.createGardenButton}
+            onPress={() => props.navigation.navigate("principal")}
             title="Create Garden" 
-            titleStyle={styles.titleStyle} 
-            buttonStyle={styles.buttonStyle}
-            onPress={() => {
-              props.navigation.navigate("principal")
-            }}/>
+            titleStyle={Styles.createGardenButtonTitle} 
+            type="outline" 
+          />
+
         </SafeAreaView>
+      
       </ScrollView>     
     )
   }
 
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      padding: 40,
-      backgroundColor: "#08B662",
-    },
-  
-    inputStyle: {
-      borderRadius: 16,
-      backgroundColor: 'white',
-      color: "#000",
-      textAlignVertical: 'top'
-    },
-  
-    labelStyle: {
-      fontSize: 20,
-      paddingLeft: 10,
-      color: "#000"
-    },
-  
-    buttonStyle: {
-      alignSelf: 'center',
-      height: 60,
-      width: 200,
-      color: "#fefefe",
-      backgroundColor: "#09894C",
-      borderColor: "#FFF"
-    },
-  
-    titleStyle: {
-      color: '#FEFEFE'
-    }
-  
-    
-  })
-  export default CreateGarden
+export default CreateGarden

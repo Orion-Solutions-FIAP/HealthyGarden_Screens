@@ -1,20 +1,23 @@
 import React, {useState} from 'react'
+
 import {
   SafeAreaView,
-  StyleSheet,
   Text,
   View
 } from 'react-native'
+
 import {
-  Header,
-  Button
+  Button,
+  Header
 } from 'react-native-elements'
-import StatusCard from '../elements/StatusCard'
-import LeafMenuIcon from '../elements/LeafMenuIcon'
+
 import DropIcon from '../elements/DropIcon'
+import LeafMenuIcon from '../elements/LeafMenuIcon'
+import MQTT from 'sp-react-native-mqtt'
 import PlantIcon from '../elements/PlantIcon'
+import StatusCard from '../elements/StatusCard'
+import Styles from '../elements/Styles'
 import ThermometerIcon from '../elements/ThermometerIcon'
-import MQTT from 'sp-react-native-mqtt';
 
 const client = MQTT.createClient({
   uri: 'ws://ioticos.org:1883',
@@ -26,8 +29,8 @@ const client = MQTT.createClient({
 
 const Principal = () => {
   
-  let [temperature, setTemperature] = useState(0)
-  let [humidity, setHumidity] = useState(0)
+  const [temperature, setTemperature] = useState(0)
+  const [humidity, setHumidity] = useState(0)
 
   
   client.then(function(client) {
@@ -52,47 +55,53 @@ const Principal = () => {
   })
 
   return(
-    <SafeAreaView style={styles.container}>
-      <Header backgroundColor='#08B662' leftComponent={<LeafMenuIcon/>}/>
-      <Text style={styles.title}>Jardim</Text>
-      <StatusCard containerColor='#4A9F2C' textSize = {16} statusText='Sua horta está:' componentIcon={<PlantIcon/>}/>
-      <StatusCard containerColor='#2C6F9F' textSize = {24} statusText={humidity+"%"}  componentIcon={<DropIcon/>}/>
-      <StatusCard containerColor='#9F712C' textSize = {24} statusText={temperature} componentIcon={<ThermometerIcon/>}/>
-      <View style={{flexDirection:'row', justifyContent:'center'}}>
-        <Button title='Abre' buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer}
-          onPress={() => {client.then(function(client){client.publish('11FkGoi1g8h6cP8/solenoid/', "0", 0, false);})}} />
-        <Button title='Fecha' buttonStyle={styles.buttonStyle} containerStyle={styles.buttonContainer}
-          onPress={() => {client.then(function(client){client.publish('11FkGoi1g8h6cP8/solenoid/', "1", 0, false);})}} />
+    <SafeAreaView style={Styles.principalContainer}>
+      <Header 
+        backgroundColor='#08B662' 
+        leftComponent={<LeafMenuIcon/>}
+      />
+      
+      <Text style={Styles.principalTitle}>Jardim</Text>
+      
+      <StatusCard 
+        componentIcon={<PlantIcon/>}
+        containerColor='#4A9F2C' 
+        statusText='Sua horta está:' 
+        textSize = {16} 
+      />
+
+      <StatusCard 
+        componentIcon={<DropIcon/>}
+        containerColor='#2C6F9F' 
+        statusText={humidity+"%"}  
+        textSize = {24} 
+      />
+      
+      <StatusCard 
+        componentIcon={<ThermometerIcon/>}
+        containerColor='#9F712C' 
+        statusText={temperature} 
+        textSize = {24} 
+      />
+      
+      <View style={Styles.principalViewButtons}>
+      
+        <Button 
+          buttonStyle={Styles.principalButton} 
+          containerStyle={Styles.principalButtonContainer}
+          onPress={() => {client.then(function(client){client.publish('11FkGoi1g8h6cP8/solenoid/', "0", 0, false);})}} 
+          title='Abre'
+        /> 
+        <Button 
+          buttonStyle={Styles.principalButton} 
+          containerStyle={Styles.principalButtonContainer}
+          onPress={() => {client.then(function(client){client.publish('11FkGoi1g8h6cP8/solenoid/', "1", 0, false);})}} 
+          title='Fecha' 
+        />
       </View>
     </SafeAreaView>
     
   )
 }
-
-const styles = StyleSheet.create({
-    container:{
-      flex: 1,
-      backgroundColor: '#08B662'
-    },
-  
-    title:{
-      marginTop: 32,
-      textAlign: 'center',
-      color: '#FEFEFE',
-      fontSize: 36
-    },
-  
-    buttonContainer:{
-      width: 80, 
-      margin: 40
-    },
-  
-    buttonStyle:{
-      backgroundColor:'#09894C', 
-      borderStyle:'solid', 
-      borderColor:'#FEFEFE', 
-      borderWidth:1
-    }
-  })
 
 export default Principal

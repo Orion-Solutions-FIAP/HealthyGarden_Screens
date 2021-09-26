@@ -1,22 +1,23 @@
 import React, {useState} from 'react'
 import {
-  View,
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
   Image,
-  Text
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native'
 
 import {
-  Input,
   Button,
+  Input
  } from 'react-native-elements'
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LeafIcon from '../elements/LeafMenuIcon';
+
+import Styles from '../elements/Styles';
 
 const Stack = createNativeStackNavigator()
 
@@ -25,118 +26,73 @@ const Login = (props) => {
     let [email, setEmail] = useState('')
     let [password, setPassword] = useState('')
 
-
     const validate = () => {
-
       
-
       return true
     }
 
-
     return (
 
-      <ScrollView style={styles.container}>
+      <ScrollView style={Styles.loginContainer}>
+        
         <SafeAreaView>
-          <View style={{alignSelf: 'center', paddingBottom: 16}}>
+          
+          <View style={Styles.loginIcon}>
             <LeafIcon/>
           </View>
           
           <Input 
+            inputStyle={Styles.loginInput}
             label="Email" 
-            labelStyle={styles.labelStyle} 
-            inputStyle={styles.inputStyle}/>
+            labelStyle={Styles.loginLabel} 
+          />
 
           <View>
             <Input
-              secureTextEntry={true} 
+              containerStyle={Styles.loginInputPass}
+              inputStyle={Styles.loginInput}
               label="Senha" 
-              labelStyle={styles.labelStyle} 
-              inputStyle={styles.inputStyle}
-              containerStyle={{marginBottom:-20}}/>
+              labelStyle={Styles.loginLabel} 
+              secureTextEntry={true} 
+            />
 
             <TouchableOpacity 
-              style={{paddingLeft:20}}
-              onPress={()=>{props.navigation.navigate("password")}}>
-              <Text style={{color:"#FEFEFE", marginTop:0}}>Esqueci minha senha</Text>
+              onPress={() => {props.navigation.navigate("password")}}
+              style={Styles.loginForgotPass}>
+                
+              <Text style={Styles.loginForgotPassText}>
+                Esqueci minha senha
+              </Text>
+            
             </TouchableOpacity>
           </View>
 
           <Button 
-            type="outline" 
+            buttonStyle={Styles.loginButton} 
+            onPress={() => props.navigation.navigate("createGarden")}
             title="Login" 
-            titleStyle={styles.titleStyle} 
-            buttonStyle={styles.buttonStyle} 
-            onPress={() => {
-                props.navigation.navigate("createGarden")
-            }}/>
+            titleStyle={Styles.loginButtonTitle} 
+            type="outline" 
+          />
 
           <TouchableOpacity 
-            style={styles.microsoftButton} 
-            onPress={() => {
-                props.navigation.navigate("createGarden")
-            }}>
-            <Image style={styles.icon} source={require('../../src/image/icon_microsoft.png')}/>
-            <Text style={styles.titleStyle}> Login with Microsoft </Text>
+            onPress={() => props.navigation.navigate("createGarden")}
+            style={Styles.loginMicrosoftButton}>
+            
+            <Image 
+              source={require('../../src/image/icon_microsoft.png')}
+              style={Styles.loginIconMicrosoft} 
+            />
+            
+            <Text style={Styles.loginButtonTitle}>
+              Login with Microsoft 
+            </Text>
           </TouchableOpacity>
 
         </SafeAreaView>
+      
       </ScrollView>     
     )
   }
 
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      padding: 40,
-      backgroundColor: "#08B662",
-    },
-  
-    inputStyle: {
-      borderRadius: 16,
-      backgroundColor: 'white',
-      color: "#000"
-    },
-  
-    labelStyle: {
-      fontSize: 20,
-      paddingLeft: 10,
-      color: "#000"
-    },
-  
-    buttonStyle: {
-      alignSelf: 'center',
-      height: 60,
-      width: 200,
-      color: "#fefefe",
-      backgroundColor: "#09894C",
-      borderColor: "#FFF",
-      marginTop:24
-    },
-  
-    titleStyle: {
-      color: '#FEFEFE'
-    },
-
-    microsoftButton: {
-        marginTop: 16,
-        height: 60,
-        width: 200,
-        backgroundColor: "#09894C",
-        borderColor: "#FFF",
-        alignSelf: 'center',
-        justifyContent: 'center',
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-
-    icon: {
-        height: 40,
-        width: 40
-    }
-  
-    
-  })
-  export default Login
+export default Login

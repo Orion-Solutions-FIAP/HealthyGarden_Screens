@@ -1,13 +1,21 @@
 import React, {useState} from 'react'
+
 import {
-  SafeAreaView, StyleSheet, Text, View, ScrollView
+  SafeAreaView,
+  ScrollView,
+  Text, 
+  View
 } from 'react-native'
 
 import {
-  Button, Input, Switch
+  Button, 
+  Input, 
+  Switch
 } from 'react-native-elements'
 
 import InputMinMax from '../elements/InputMinMax'
+
+import Styles from '../elements/Styles'
 
 const Settings = () => {
 
@@ -23,99 +31,101 @@ const Settings = () => {
 
     return(
       <ScrollView>
-        <SafeAreaView style={styles.container} >
+
+        <SafeAreaView style={Styles.settingsContainer} >
           
-          <View style={styles.view1}>
+          <View>
           
-            <Switch onValueChange={()=> {setChange(!change)}} color="green" value={change} />
+            <Switch 
+              color="green" 
+              onValueChange={()=> setChange(!change)} 
+              value={change} 
+            />
             
             <Input 
-              inputContainerStyle={{ borderColor: '#000'}}
+              inputContainerStyle={Styles.settingsInputContainer}
               label='Nome'
-              labelStyle={{color: '#000'}}
-              placeholder='Nome'
+              labelStyle={Styles.settingsLabel}
               onChangeText={(txt) => setName(txt)}
+              placeholder='Nome'
               value={name}
             />
     
             <Input 
-              inputContainerStyle={{ borderColor: '#000'}}
+              inputContainerStyle={Styles.settingsInputContainer}
               label='Nome da Horta' 
-              labelStyle={{color: '#000'}} 
-              placeholder='Nome da Horta'
+              labelStyle={Styles.settingsLabel} 
               onChangeText={(txt) => setGardenName(txt)}
+              placeholder='Nome da Horta'
               value={gardenName}
             />
     
             <Input 
-              inputContainerStyle={{borderColor: '#000', borderRadius: 10, borderWidth: 1, height:75}}
-              inputStyle={{height:85, textAlignVertical: 'top'}}
+              inputContainerStyle={Styles.settingsInputContainerDescription}
+              inputStyle={Styles.settingsInputDescription}
               label='Descrição'
-              labelStyle={{color: '#000'}}  
+              labelStyle={Styles.settingsLabel}  
               maxLength={200}
               multiline={true} 
-              placeholder='Descrição'
               onChangeText={(txt) => setGardenDescription(txt)}
+              placeholder='Descrição'
               value={gardenDescription} 
             /> 
     
           </View>
           
-          <View style={styles.view2}>
+          <View style={Styles.settingsViewInputs}>
           
-            <View style={styles.view3}>
-              <InputMinMax title='Temp. Min' placeholder='°C' onChangeText={(txt) => {setMinTemp(txt)}}/>
-              <InputMinMax title='Temp. Máx' placeholder='°C' onChangeText={(txt) => {setMaxTemp(txt)}}/>
+            <View style={Styles.settingsInputsTemp}>
+              
+              <InputMinMax
+                onChangeText={(txt) => setMinTemp(txt)} 
+                placeholder='°C' 
+                title='Temp. Min' 
+                value={minTemp} 
+              />
+              
+              <InputMinMax 
+                onChangeText={(txt) => setMaxTemp(txt)}
+                placeholder='°C' 
+                title='Temp. Máx' 
+                value={maxTemp}
+              />
+
             </View>
           
-            <View style={styles.view4}>
-              <InputMinMax title='Umd. Min' placeholder='%' onChangeText={(txt) => {setMinHum(txt)}}/>
-              <InputMinMax title='Umd. Máx' placeholder='%' onChangeText={(txt) => {setMaxHum(txt)}}/>
+            <View style={Styles.settingsInputsUmd}>
+              <InputMinMax 
+                onChangeText={(txt) => setMinHum(txt)}
+                placeholder='%' 
+                title='Umd. Min' 
+                value={minHum}
+              />
+              <InputMinMax 
+                onChangeText={(txt) => setMaxHum(txt)}
+                placeholder='%' 
+                title='Umd. Máx' 
+                value={maxHum}
+              />
             </View>
+
           </View>
-          <View style={{paddingTop: 15, flexDirection:'column', justifyContent:'space-between'}}>
+          
+          <View style={Styles.settingsViewButton}>
             <Button 
-              buttonStyle={{ borderColor: "#FFF", width: 150, height: 55, alignSelf: 'center', backgroundColor: '#0B6F3F'}}  
+              buttonStyle={Styles.settingsButton}  
               title='Save'
             />
-            <Text style={styles.copy} >{'\u00A9'} 2020-2021 OrionSolutions, Inc.</Text>
+            <Text style={Styles.settinsCopyright}>
+              {'\u00A9'} 2020-2021 OrionSolutions, Inc.
+            </Text>
           </View>
+        
         </SafeAreaView>
+
       </ScrollView>
     )
 }
 
-
-const styles = StyleSheet.create({
-    container : {
-      flex: 1,
-      flexDirection: 'column', 
-      padding: 16
-    },
-    copy : {
-      alignSelf: 'center',
-      color: '#000',
-      margin: 12
-    },
-    view1 : {
-      flex: 1
-    },
-    view2 : {
-      flex: 1,
-      flexDirection:'column'
-    },
-    view3 : {
-      flex: 1, 
-      flexDirection:'row', 
-      justifyContent: 'space-evenly'
-    },
-    view4 : {
-      flex: 2, 
-      flexDirection:'row', 
-      justifyContent: 'space-evenly',
-      paddingTop: 16,
-      paddingBottom: 8
-    } 
-})
 
 export default Settings
