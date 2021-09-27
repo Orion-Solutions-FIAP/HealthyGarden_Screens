@@ -1,15 +1,14 @@
 import React, {useState} from 'react'
 import {
-  View,
+  Alert,
   SafeAreaView,
-  StyleSheet,
   ScrollView,
-  Alert
+  View
 } from 'react-native'
 
 import {
-  Input,
   Button,
+  Input
  } from 'react-native-elements'
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -17,6 +16,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LeafIcon from '../elements/LeafMenuIcon';
 import { ScreenStackHeaderBackButtonImage } from 'react-native-screens';
 import { postUser } from '../services/UserServices';
+
+import Styles from '../elements/Styles';
 
 const Stack = createNativeStackNavigator()
 
@@ -71,88 +72,54 @@ const Register = (props) => {
 
     return (
 
-      <ScrollView style={styles.container}>
+      <ScrollView style={Styles.registerContainer}>
+
         <SafeAreaView>
-          <View style={{alignSelf: 'center', paddingBottom: 16}}>
+
+          <View style={Styles.registerIcon}>
             <LeafIcon />
           </View>
+
           <Input 
+            inputStyle={Styles.registerInput}
             label="Name" 
-            labelStyle={styles.labelStyle} 
-            inputStyle={styles.inputStyle}
-            onChangeText={(value) => {
-              setName(value);
-            }}/>
+            labelStyle={Styles.registerLabel} 
+            onChangeText={(value) => setName(value) }
+          />
+
           <Input 
+            inputStyle={Styles.registerInput}
             label="Email" 
-            labelStyle={styles.labelStyle} 
-            inputStyle={styles.inputStyle}
-            onChangeText={(value) => {
-              setEmail(value);
-            }}/>
+            labelStyle={Styles.registerLabel} 
+            onChangeText={(value) => setEmail(value)}
+            />
+            
           <Input
-            secureTextEntry={true}
+            inputStyle={Styles.registerInput}
             label="Password" 
-            labelStyle={styles.labelStyle} 
-            inputStyle={styles.inputStyle}
-            onChangeText={(value) => {
-              setPassword(value);
-            }}/>
-          <Input 
+            labelStyle={Styles.registerLabel} 
+            onChangeText={(value) => setPassword(value) }
             secureTextEntry={true}
+          />
+
+          <Input 
+            inputStyle={Styles.registerInput}
             label="Repeat password" 
-            labelStyle={styles.labelStyle} 
-            inputStyle={styles.inputStyle}
-            onChangeText={(value) => {
-              setRepeatPassword(value)
-            }}/>
+            labelStyle={Styles.registerLabel} 
+            onChangeText={(value) => setRepeatPassword(value) }
+            secureTextEntry={true}
+          />
 
           <Button 
             type="outline" 
             title="Register here" 
-            titleStyle={styles.titleStyle} 
-            buttonStyle={styles.buttonStyle}
-            onPress={() => {
-              register()
-            }}/>
+            titleStyle={Styles.registerButtonTitle} 
+            buttonStyle={Styles.registerButton}
+            onPress={() => register() }
+          />
         </SafeAreaView>
       </ScrollView>     
     )
   }
 
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      padding: 40,
-      backgroundColor: "#08B662",
-    },
-  
-    inputStyle: {
-      borderRadius: 16,
-      backgroundColor: 'white',
-      color: "#000",
-    },
-  
-    labelStyle: {
-      fontSize: 20,
-      paddingLeft: 10,
-      color: "#000"
-    },
-  
-    buttonStyle: {
-      alignSelf: 'center',
-      height: 60,
-      width: 200,
-      color: "#fefefe",
-      backgroundColor: "#09894C",
-      borderColor: "#FFF"
-    },
-  
-    titleStyle: {
-      color: '#FEFEFE'
-    }
-  
-    
-  })
-  export default Register
+export default Register

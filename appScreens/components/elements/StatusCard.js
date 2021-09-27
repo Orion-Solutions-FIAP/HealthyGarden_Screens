@@ -8,7 +8,8 @@ import {
     Text,
     StyleSheet
 } from 'react-native'
-import DropIcon from './DropIcon'
+
+import Styles from './Styles'
 
 const StatusCard = (props) => {
     
@@ -30,7 +31,7 @@ const StatusCard = (props) => {
 
     return (
         <Card containerStyle={styles.container}>
-            <View style={{flexDirection:'row', justifyContent:'center'}}>
+            <View style={Styles.statusCard_view}>
                 {props.componentIcon}
                 <Text style={styles.mainText}>{props.statusText}</Text>
             </View>
