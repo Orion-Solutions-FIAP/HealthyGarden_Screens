@@ -233,7 +233,7 @@ export default StyleSheet.create({
   principalTitle : {
     color: '#FEFEFE',
     fontSize: 36,
-    marginTop: 32,
+    marginTop: 16,
     textAlign: 'center'
   },
 

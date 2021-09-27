@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 
 import {
   SafeAreaView,
+  ScrollView,
   Text,
   View
 } from 'react-native'
@@ -55,10 +56,12 @@ const Principal = () => {
   })
 
   return(
+    <ScrollView>
     <SafeAreaView style={Styles.principalContainer}>
       <Header 
         backgroundColor='#08B662' 
         leftComponent={<LeafMenuIcon/>}
+        containerStyle={{marginTop:-15, paddingTop:-15}}
       />
       
       <Text style={Styles.principalTitle}>Jardim</Text>
@@ -100,6 +103,7 @@ const Principal = () => {
         />
       </View>
     </SafeAreaView>
+    </ScrollView>
     
   )
 }
