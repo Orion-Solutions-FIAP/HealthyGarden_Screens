@@ -1,14 +1,17 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Home from '../screens/Home';
 import Principal from '../screens/Principal';
 import Settings from '../screens/Settings';
 import Historic from '../screens/Historic';
 import Icon from 'react-native-vector-icons/Feather';
+import { NavigationContainer, useLinkProps } from '@react-navigation/native';
+import { Alert } from 'react-native';
+import Logout from '../screens/Logout';
 
 const Tab = createBottomTabNavigator();
 
-function MyTabs() {
+function MyTabs({navigation}) {
+
   return (
         <Tab.Navigator screenOptions={({route})=>({tabBarActiveTintColor: '#000', tabBarInactiveTintColor:'#FEFEFE',tabBarStyle:{backgroundColor:'#08B662'},tabBarIcon: ({ color, size }) => {
             let iconName;
@@ -36,7 +39,12 @@ function MyTabs() {
             <Tab.Screen name="Home" component={Principal} options={{title:'Home',tabBarBadgeStyle:{color:'#FEFEFE'}}} option={{headerShown: false}}/>
             <Tab.Screen name="Histórico" component={Historic} />
             <Tab.Screen name="Configuração" component={Settings} />
-            <Tab.Screen name="Sair" component={Home} options={{headerShown: false}}/>
+            <Tab.Screen 
+                name="Sair" 
+                component={Logout} 
+                options={{
+                    headerShown: false
+                }}/>
         </Tab.Navigator>
   );
 }

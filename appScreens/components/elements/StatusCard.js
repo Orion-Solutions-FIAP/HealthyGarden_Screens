@@ -16,7 +16,7 @@ const StatusCard = (props) => {
     const styles = StyleSheet.create({
         container:{
             borderRadius:16,
-            margin:32,
+            margin:24,
             backgroundColor: props.containerColor
         },
 

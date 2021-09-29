@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 
 import {
   SafeAreaView,
+  ScrollView,
   Text,
   View
 } from 'react-native'
@@ -55,51 +56,53 @@ const Principal = () => {
   })
 
   return(
-    <SafeAreaView style={Styles.principalContainer}>
-      <Header 
-        backgroundColor='#08B662' 
-        leftComponent={<LeafMenuIcon/>}
-      />
-      
-      <Text style={Styles.principalTitle}>Jardim</Text>
-      
-      <StatusCard 
-        componentIcon={<PlantIcon/>}
-        containerColor='#4A9F2C' 
-        statusText='Sua horta está:' 
-        textSize = {16} 
-      />
-
-      <StatusCard 
-        componentIcon={<DropIcon/>}
-        containerColor='#2C6F9F' 
-        statusText={humidity+"%"}  
-        textSize = {24} 
-      />
-      
-      <StatusCard 
-        componentIcon={<ThermometerIcon/>}
-        containerColor='#9F712C' 
-        statusText={temperature} 
-        textSize = {24} 
-      />
-      
-      <View style={Styles.principalViewButtons}>
-      
-        <Button 
-          buttonStyle={Styles.principalButton} 
-          containerStyle={Styles.principalButtonContainer}
-          onPress={() => {client.then(function(client){client.publish('11FkGoi1g8h6cP8/solenoid/', "0", 0, false);})}} 
-          title='Abre'
-        /> 
-        <Button 
-          buttonStyle={Styles.principalButton} 
-          containerStyle={Styles.principalButtonContainer}
-          onPress={() => {client.then(function(client){client.publish('11FkGoi1g8h6cP8/solenoid/', "1", 0, false);})}} 
-          title='Fecha' 
+    <ScrollView style={Styles.principalContainer}>
+      <SafeAreaView>
+        <Header 
+          backgroundColor='#08B662' 
+          leftComponent={<LeafMenuIcon/>}
         />
-      </View>
-    </SafeAreaView>
+        
+        <Text style={Styles.principalTitle}>Jardim</Text>
+        
+        <StatusCard 
+          componentIcon={<PlantIcon/>}
+          containerColor='#4A9F2C' 
+          statusText='Sua horta está:' 
+          textSize = {16} 
+        />
+
+        <StatusCard 
+          componentIcon={<DropIcon/>}
+          containerColor='#2C6F9F' 
+          statusText={humidity+"%"}  
+          textSize = {24} 
+        />
+        
+        <StatusCard 
+          componentIcon={<ThermometerIcon/>}
+          containerColor='#9F712C' 
+          statusText={temperature} 
+          textSize = {24} 
+        />
+        
+        <View style={Styles.principalViewButtons}>
+        
+          <Button 
+            buttonStyle={Styles.principalButton} 
+            containerStyle={Styles.principalButtonContainer}
+            onPress={() => {client.then(function(client){client.publish('11FkGoi1g8h6cP8/solenoid/', "0", 0, false);})}} 
+            title='Abre'
+          /> 
+          <Button 
+            buttonStyle={Styles.principalButton} 
+            containerStyle={Styles.principalButtonContainer}
+            onPress={() => {client.then(function(client){client.publish('11FkGoi1g8h6cP8/solenoid/', "1", 0, false);})}} 
+            title='Fecha' 
+          />
+        </View>
+      </SafeAreaView>
+    </ScrollView>
     
   )
 }
