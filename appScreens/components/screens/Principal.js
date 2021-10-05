@@ -22,7 +22,7 @@ import Styles from '../elements/Styles'
 import ThermometerIcon from '../elements/ThermometerIcon'
 import { getToken } from '../database/DB'
 import { getUserEmail } from '../services/UserServices'
-import { getGarden } from '../services/GardenServices'
+import { getGarden, getGardenByIdUser } from '../services/GardenServices'
 import jwtDecode from 'jwt-decode'
 
 const client = MQTT.createClient({
@@ -35,14 +35,17 @@ const client = MQTT.createClient({
 
 const Principal = (props) => {
   
+
   const [temperature, setTemperature] = useState(0)
   const [humidity, setHumidity] = useState(0)
 
   const [nameGarden, setNameGarden] = useState('')
   const [numberTemp, setNumberTemp] = useState(0)
   const [numberHumi, setNumberHumi] = useState(0)
-  const [idUser, setIdUser] = useState(0)
   const [didMount, setDidMount] = useState(false); 
+
+  //const {idUser} = props.route.params
+
 
   const redirect = () => {
     props.navigation.reset({
@@ -53,15 +56,8 @@ const Principal = (props) => {
     })
   }
 
-  const getIdUser = (token) => {
-    const payload = jwtDecode(token)
-    getUserEmail(payload.email)
-      .then((response) => setIdUser(response.data.id))
-      .catch(() => Alert.alert('Erro', 'Ocorreu um erro'))
-  }
-
-  const getGardenById = (id) => {
-    getGarden(id)
+  const getGardenById = (idUser) => {
+    getGardenByIdUser(idUser)
       .then((response) => {
         setNameGarden(response.data.name)
         setNumberHumi(response.data.moistureStatus)
@@ -74,8 +70,7 @@ const Principal = (props) => {
       setDidMount(true)
       getToken((error, success) => {
           if( !error && success && success.trim().length > 0 ) {
-              getIdUser(success)
-              getGardenById(1)
+              getGardenById(16)
           }
       })
       return () => setDidMount(false);

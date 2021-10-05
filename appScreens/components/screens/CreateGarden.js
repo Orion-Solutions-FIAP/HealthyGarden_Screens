@@ -80,13 +80,6 @@ const CreateGarden = (props) => {
             titleStyle={Styles.createGardenButtonTitle} 
             type="outline" 
           />
-            <Button 
-            buttonStyle={Styles.createGardenButton}
-            onPress={() => props.navigation.navigate("principal")}
-            title="Create Garden" 
-            titleStyle={Styles.createGardenButtonTitle} 
-            type="outline" 
-          />
 
         </SafeAreaView>
       

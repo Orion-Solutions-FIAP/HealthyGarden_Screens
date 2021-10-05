@@ -20,15 +20,18 @@ import LeafIcon from '../elements/LeafMenuIcon';
 
 import Styles from '../elements/Styles';
 
-import { login } from '../services/UserServices';
+import { login, getUserEmail } from '../services/UserServices';
 
 import { saveToken } from '../database/DB';
+
+import jwtDecode from 'jwt-decode';
 
 
 const Login = (props) => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [idUser, setIdUser] = useState('')
 
     const validate = () => {
 
@@ -49,18 +52,31 @@ const Login = (props) => {
       props.navigation.reset({
           index : 0,
           routes : [{
-              name: 'principal'
+              name: 'principal',
+              params: {
+                idUser
+              }
           }]
       })
+    }
+
+    const getIdUser = (token) => {
+      const payload = jwtDecode(token)
+      getUserEmail(payload.email)
+        .then((response) => {
+          setIdUser(response.data.id)
+          console.log(idUser)
+        })
+        .catch(() => Alert.alert('Erro', 'Ocorreu um erro'))
     }
 
     const loginUser = () => {
       if (validate()) {
           login(email, password)
             .then( (response) => { 
-              console.log(response.data.token)
             saveToken(response.data.token)
-            redirect()
+            getIdUser(response.data.token)
+            redirect()      
       })
           .catch(() => Alert.alert('Erro', 'Email/senha inválidos!') )
       }
