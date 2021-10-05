@@ -2,9 +2,9 @@ const axios = require("axios")
 const URL_GARDEN_API = 'https://healthygardenapi.azurewebsites.net/api/Garden/'
 
 
-export const getGarden = () => {
+export const getGarden = (id) => {
     return axios({
-        url: URL_GARDEN_API + '/1',
+        url: URL_GARDEN_API + '/' + id,
         method: 'get'
     })
 }

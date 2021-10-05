@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import {
+  Alert,
   Image,
   SafeAreaView,
   ScrollView,
@@ -19,16 +20,50 @@ import LeafIcon from '../elements/LeafMenuIcon';
 
 import Styles from '../elements/Styles';
 
-const Stack = createNativeStackNavigator()
+import { login } from '../services/UserServices';
+
+import { saveToken } from '../database/DB';
+
 
 const Login = (props) => {
 
-    let [email, setEmail] = useState('')
-    let [password, setPassword] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
 
     const validate = () => {
-      
+
+      if( email.trim().length === 0){
+          Alert.alert('Erro', 'Informe um Email!')
+          return false
+      }
+
+      if( password.length === 0){
+          Alert.alert('Erro', 'Informe a senha!') 
+          return false
+      }
+
       return true
+    }
+
+    const redirect = () => {
+      props.navigation.reset({
+          index : 0,
+          routes : [{
+              name: 'principal'
+          }]
+      })
+    }
+
+    const loginUser = () => {
+      if (validate()) {
+          login(email, password)
+            .then( (response) => { 
+              console.log(response.data.token)
+            saveToken(response.data.token)
+            redirect()
+      })
+          .catch(() => Alert.alert('Erro', 'Email/senha inválidos!') )
+      }
     }
 
     return (
@@ -45,6 +80,8 @@ const Login = (props) => {
             inputStyle={Styles.loginInput}
             label="Email" 
             labelStyle={Styles.loginLabel} 
+            onChangeText={(txt) => setEmail(txt)}
+            value={email}
           />
 
           <View>
@@ -53,7 +90,9 @@ const Login = (props) => {
               inputStyle={Styles.loginInput}
               label="Senha" 
               labelStyle={Styles.loginLabel} 
-              secureTextEntry={true} 
+              secureTextEntry={true}
+              onChangeText={(txt) => setPassword(txt)}
+              value={password} 
             />
 
             <TouchableOpacity 
@@ -69,7 +108,7 @@ const Login = (props) => {
 
           <Button 
             buttonStyle={Styles.loginButton} 
-            onPress={() => props.navigation.navigate("createGarden")}
+            onPress={() => loginUser()}
             title="Login" 
             titleStyle={Styles.loginButtonTitle} 
             type="outline" 

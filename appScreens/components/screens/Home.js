@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 
 import {
   SafeAreaView, 
@@ -12,8 +12,28 @@ import {
 
 import LeafIcon from '../elements/LeafMenuIcon'
 import Styles from '../elements/Styles'
+import { getToken } from '../database/DB'
+
 
 const Home = (props) => {
+
+  const redirect = () => {
+    props.navigation.reset({
+        index : 0,
+        routes : [{
+            name: 'principal'
+        }]
+    })
+  }
+  
+  useEffect( () => {
+    getToken( (error, token) => {
+        if(!error && token?.trim().length > 0) {
+          redirect()
+        }
+    } )
+  } )
+
   return(
     <SafeAreaView style={Styles.homeContainter}>
 
