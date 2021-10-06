@@ -99,7 +99,7 @@ const Register = (props) => {
             
           <Input
             inputStyle={Styles.registerInput}
-            label="Password" 
+            label="Senha" 
             labelStyle={Styles.registerLabel} 
             onChangeText={(value) => setPassword(value) }
             secureTextEntry={true}
@@ -107,7 +107,7 @@ const Register = (props) => {
 
           <Input 
             inputStyle={Styles.registerInput}
-            label="Repetir password" 
+            label="Repetir Senha" 
             labelStyle={Styles.registerLabel} 
             onChangeText={(value) => setRepeatPassword(value) }
             secureTextEntry={true}

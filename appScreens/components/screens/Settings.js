@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 
 import {
   SafeAreaView,
@@ -19,15 +19,19 @@ import Styles from '../elements/Styles'
 
 const Settings = () => {
 
-  const[change, setChange] = useState(true)
-  
-  const[name, setName] = useState('')
-  const[gardenName, setGardenName] = useState('')
-  const[gardenDescription, setGardenDescription] = useState('')
-  const[minTemp, setMinTemp] = useState(0)
-  const[maxTemp, setMaxTemp] = useState(0)
-  const[minHum, setMinHum] = useState(0)
-  const[maxHum, setMaxHum] = useState(0)
+    const[change, setChange] = useState(true)
+    
+    const[name, setName] = useState('')
+    const[gardenName, setGardenName] = useState('')
+    const[gardenDescription, setGardenDescription] = useState('')
+    const[minTemp, setMinTemp] = useState(0)
+    const[maxTemp, setMaxTemp] = useState(0)
+    const[minHum, setMinHum] = useState(0)
+    const[maxHum, setMaxHum] = useState(0)
+
+    useEffect(() => {
+      
+    })
 
     return(
       <ScrollView>
