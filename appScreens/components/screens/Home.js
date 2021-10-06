@@ -46,7 +46,7 @@ const Home = (props) => {
         </Text>
 
         <Text style={Styles.homeDescription}>
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+          Seu aplicativo Healthy Garden para manter sua horta saudável e bem cuidada. 
         </Text>
 
       </View>
@@ -55,7 +55,7 @@ const Home = (props) => {
         <Button 
           buttonStyle={Styles.homeButtonRegister}   
           onPress={() => props.navigation.navigate('register') } 
-          title='Register here' 
+          title='Cadastrar' 
           titleStyle={Styles.homeButtonTitle} 
           type="outline"  
         />

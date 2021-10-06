@@ -65,14 +65,14 @@ const CreateGarden = (props) => {
 
           <Input 
             inputStyle={Styles.createGardenInput}
-            label="Garden's name" 
+            label="Nome da Horta" 
             labelStyle={Styles.createGardenLabel} 
             onChangeText={(value) => setGardenName(value)}
           />
             
           <Input 
             inputStyle={Styles.createGardenInput}
-            label="Description" 
+            label="Descrição" 
             labelStyle={Styles.createGardenLabel} 
             multiline={true} 
             numberOfLines={7} 
@@ -82,7 +82,7 @@ const CreateGarden = (props) => {
           <Button 
             buttonStyle={Styles.createGardenButton}
             onPress={() => registerGarden()}
-            title="Create Garden" 
+            title="Cadastrar Horta" 
             titleStyle={Styles.createGardenButtonTitle} 
             type="outline" 
           />
