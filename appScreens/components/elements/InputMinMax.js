@@ -1,10 +1,11 @@
 import React from 'react'
 
 import {
-  Text, 
-  TextInput,
+  Text,
+  TextInput, 
   View
 } from 'react-native'
+
 
 import Styles from './Styles';
 

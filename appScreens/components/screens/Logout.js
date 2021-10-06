@@ -13,9 +13,13 @@ const Logout = ({navigation}) => {
                 {text: 'Sim', onPress: () => (
                     removeUserId((error) => {
                         if(!error){
-                            navigation.reset({
-                                index:1,
-                                routes:[{name:'home'}]
+                            removeToken((error) => {
+                                if(!error){
+                                    navigation.reset({
+                                        index:1,
+                                        routes:[{name:'home'}]
+                                    })
+                                }
                             })
                         }
                     })
