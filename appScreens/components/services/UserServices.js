@@ -39,3 +39,22 @@ export const deleteUser = (userId) => {
         method: 'delete',
     })
 }
+
+export const login = async (email, password) => {
+  return axios({
+    url: URL_USER_API + '/login',
+    method: 'post',
+    data : { 
+      email, 
+      password 
+    }
+  })
+}
+
+export const getUserEmail = (email) => {
+  return axios({
+      url: URL_USER_API + '/' + email,
+      method: 'get'
+  })
+}
+

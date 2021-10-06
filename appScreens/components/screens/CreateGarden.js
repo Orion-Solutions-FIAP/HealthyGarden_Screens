@@ -14,6 +14,7 @@ import {
 import LeafIcon from '../elements/LeafMenuIcon';
 import { postGarden } from '../services/GardenServices';
 import Styles from '../elements/Styles';
+import { getUserId } from '../database/DB';
 
 const CreateGarden = (props) => {
 
@@ -36,15 +37,20 @@ const CreateGarden = (props) => {
 
     const registerGarden = () => {
       if(validate()){
-        postGarden(gardenName, gardenDescription)
-          .then(() => {
-            Alert.alert("Sucesso", "Horta cadastrada com sucesso")          
-            props.navigation.navigate("principal")
-          })
-          .catch((err) => {
-            console.log(err)
-            Alert.alert('Erro', "Não foi possível cadastrar a horta" + err)
-          })
+        getUserId((error, success) => {
+          if( !error && success && success.trim().length > 0 ) {
+            const userId = JSON.parse(success)
+            postGarden(gardenName, gardenDescription, userId)
+              .then(() => {
+                Alert.alert("Sucesso", "Horta cadastrada com sucesso")          
+                props.navigation.navigate("principal")
+              })
+              .catch((err) => {
+                console.log(err)
+                Alert.alert('Erro', "Não foi possível cadastrar a horta" + err)
+              }) 
+          }
+        })
       }
     }
 
@@ -76,13 +82,6 @@ const CreateGarden = (props) => {
           <Button 
             buttonStyle={Styles.createGardenButton}
             onPress={() => registerGarden()}
-            title="Create Garden" 
-            titleStyle={Styles.createGardenButtonTitle} 
-            type="outline" 
-          />
-            <Button 
-            buttonStyle={Styles.createGardenButton}
-            onPress={() => props.navigation.navigate("principal")}
             title="Create Garden" 
             titleStyle={Styles.createGardenButtonTitle} 
             type="outline" 

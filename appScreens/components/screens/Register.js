@@ -57,7 +57,6 @@ const Register = (props) => {
 
     const register = () => {
       if(validate()) {
-        console.log(name,email,password)
         postUser(name,email,password)
           .then(() => {
             Alert.alert("Sucesso", "Usuário cadastrado com sucesso")

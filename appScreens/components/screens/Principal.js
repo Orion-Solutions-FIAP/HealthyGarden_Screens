@@ -1,6 +1,7 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 
 import {
+  Alert,
   SafeAreaView,
   ScrollView,
   Text,
@@ -19,6 +20,10 @@ import PlantIcon from '../elements/PlantIcon'
 import StatusCard from '../elements/StatusCard'
 import Styles from '../elements/Styles'
 import ThermometerIcon from '../elements/ThermometerIcon'
+import { getToken, getUserId } from '../database/DB'
+import { getUserEmail } from '../services/UserServices'
+import { getGarden, getGardenByIdUser } from '../services/GardenServices'
+import jwtDecode from 'jwt-decode'
 
 const client = MQTT.createClient({
   uri: 'ws://ioticos.org:1883',
@@ -28,11 +33,49 @@ const client = MQTT.createClient({
   pass:'2uQJJ3JTE4BAbYA'
 })
 
-const Principal = () => {
+const Principal = (props) => {
   
+
   const [temperature, setTemperature] = useState(0)
   const [humidity, setHumidity] = useState(0)
 
+  const [nameGarden, setNameGarden] = useState('')
+  const [numberTemp, setNumberTemp] = useState(0)
+  const [numberHumi, setNumberHumi] = useState(0)
+  const [didMount, setDidMount] = useState(false); 
+
+  //const {idUser} = props.route.params
+
+
+  const redirect = () => {
+    props.navigation.reset({
+        index : 0,
+        routes : [{
+            name: 'createGarden'
+        }]
+    })
+  }
+
+  const getGardenById = (idUser) => {
+    getGardenByIdUser(idUser)
+      .then((response) => {
+        setNameGarden(response.data.name)
+        setNumberHumi(response.data.moistureStatus)
+        setNumberTemp(response.data.temperatureStatus)
+      })
+      .catch(() => redirect())
+  }
+
+  useEffect(() => {
+      setDidMount(true)
+      getUserId((error, success) => {
+          if( !error && success && success.trim().length > 0 ) {
+              const id = JSON.parse(success)
+              getGardenById(id)
+          }
+      })
+      return () => setDidMount(false);
+  }, [])
   
   client.then(function(client) {
     client.on('message', function(msg) {
@@ -63,12 +106,12 @@ const Principal = () => {
           leftComponent={<LeafMenuIcon/>}
         />
         
-        <Text style={Styles.principalTitle}>Jardim</Text>
+        <Text style={Styles.principalTitle}>{nameGarden}</Text>
         
         <StatusCard 
           componentIcon={<PlantIcon/>}
           containerColor='#4A9F2C' 
-          statusText='Sua horta está:' 
+          statusText={"Sua horta está: " + numberTemp + numberHumi}  
           textSize = {16} 
         />
 
