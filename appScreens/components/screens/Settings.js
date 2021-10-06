@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 
 import {
+  Alert,
   SafeAreaView,
   ScrollView,
   Text, 
@@ -17,21 +18,47 @@ import InputMinMax from '../elements/InputMinMax'
 
 import Styles from '../elements/Styles'
 
-const Settings = () => {
+import { getSetting, putSetting } from '../services/SettingServices'
+import { getGardenByIdUser, putGarden} from '../services/GardenServices'
+import { getUser, putUser } from '../services/UserServices'
+import { getUserId } from '../database/DB'
+import { PROPERTY_TYPES, stringLiteral } from '@babel/types'
+import { useLinkProps } from '@react-navigation/native'
 
-    const[change, setChange] = useState(true)
+const Settings = (props) => {
     
-    const[name, setName] = useState('')
-    const[gardenName, setGardenName] = useState('')
-    const[gardenDescription, setGardenDescription] = useState('')
-    const[minTemp, setMinTemp] = useState(0)
-    const[maxTemp, setMaxTemp] = useState(0)
-    const[minHum, setMinHum] = useState(0)
-    const[maxHum, setMaxHum] = useState(0)
+    const[user, setUser] = useState({})
+    const[garden, setGarden] = useState({})
+    const[setting, setSetting] = useState({})
 
     useEffect(() => {
-      
-    })
+      getUserId((error, success) => {
+        if( !error && success && success.trim().length > 0 ) {
+          const id = JSON.parse(success)
+          getUser(id)
+            .then((response) => {
+              setUser(() => response.data)
+              getGardenByIdUser(id)
+                .then((response) => {
+                  setGarden(() => response.data)
+                  getSetting(response.data.id)
+                    .then((response) => {
+                      setSetting(() => response.data)
+                    })
+                    .catch((error) => {
+                      Alert.alert("Error", "Ocorreu um erro ao achar as configurações")
+                    })
+                })
+                .catch((error) => {
+                  Alert.alert("Erro", "Ocorreu um erro ao achar a horta!")
+                })
+            })
+            .catch((error) => {
+              Alert.alert("Erro", "Ocorreu um erro ao achar o usuário!")
+            })
+        }
+      })
+    },[])
 
     return(
       <ScrollView>
@@ -42,26 +69,26 @@ const Settings = () => {
           
             <Switch 
               color="green" 
-              onValueChange={()=> setChange(!change)} 
-              value={change} 
+              onValueChange={()=> setSetting(prevState => ({...prevState, isAutomatic: !setting.isAutomatic}))} 
+              value={setting.isAutomatic} 
             />
             
             <Input 
               inputContainerStyle={Styles.settingsInputContainer}
               label='Nome'
               labelStyle={Styles.settingsLabel}
-              onChangeText={(txt) => setName(txt)}
+              onChangeText={(txt) => setUser(prevState => ({...prevState, name:txt}))}
               placeholder='Nome'
-              value={name}
+              value={user.name}
             />
     
             <Input 
               inputContainerStyle={Styles.settingsInputContainer}
               label='Nome da Horta' 
               labelStyle={Styles.settingsLabel} 
-              onChangeText={(txt) => setGardenName(txt)}
+              onChangeText={(txt) => setGarden(prevState => ({...prevState,name:txt}))}
               placeholder='Nome da Horta'
-              value={gardenName}
+              value={garden.name}
             />
     
             <Input 
@@ -71,9 +98,9 @@ const Settings = () => {
               labelStyle={Styles.settingsLabel}  
               maxLength={200}
               multiline={true} 
-              onChangeText={(txt) => setGardenDescription(txt)}
+              onChangeText={(txt) => setGarden(prevState => ({...prevState, description:txt}))}
               placeholder='Descrição'
-              value={gardenDescription} 
+              value={garden.description} 
             /> 
     
           </View>
@@ -83,33 +110,57 @@ const Settings = () => {
             <View style={Styles.settingsInputsTemp}>
               
               <InputMinMax
-                onChangeText={(txt) => setMinTemp(txt)} 
+                onChangeText={(txt) => {
+                  if(!Number.isNaN(parseInt(txt))){
+                    setSetting(prevState => ({...prevState,minimumTemperature: parseInt(txt)}))
+                  } else {
+                    setSetting(prevState => ({...prevState, minimumTemperature: 0}))
+                  }
+                }}
                 placeholder='°C' 
                 title='Temp. Min' 
-                value={minTemp} 
+                value={String(setting.minimumTemperature)} 
               />
               
               <InputMinMax 
-                onChangeText={(txt) => setMaxTemp(txt)}
+                onChangeText={(txt) => {
+                  if(!Number.isNaN(parseInt(txt))){
+                    setSetting(prevState => ({...prevState,maximumTemperature: parseInt(txt)}))
+                  } else {
+                    setSetting(prevState => ({...prevState, maximumTemperature: 0}))
+                  }
+                }}  
                 placeholder='°C' 
                 title='Temp. Máx' 
-                value={maxTemp}
+                value={String(setting.maximumTemperature)}
               />
 
             </View>
           
             <View style={Styles.settingsInputsUmd}>
               <InputMinMax 
-                onChangeText={(txt) => setMinHum(txt)}
+                onChangeText={(txt) => {
+                  if(!Number.isNaN(parseInt(txt))){
+                    setSetting(prevState => ({...prevState,minimumMoisture: parseInt(txt)}))
+                  } else {
+                    setSetting(prevState => ({...prevState, minimumMoisture: 0}))
+                  }
+                }} 
                 placeholder='%' 
                 title='Umd. Min' 
-                value={minHum}
+                value={String(setting.minimumMoisture)}
               />
               <InputMinMax 
-                onChangeText={(txt) => setMaxHum(txt)}
+                onChangeText={(txt) => {
+                  if(!Number.isNaN(parseInt(txt))){
+                    setSetting(prevState => ({...prevState,maximumMoisture: parseInt(txt)}))
+                  } else {
+                    setSetting(prevState => ({...prevState, maximumMoisture: 0}))
+                  }
+                }} 
                 placeholder='%' 
                 title='Umd. Máx' 
-                value={maxHum}
+                value={String(setting.maximumMoisture)}
               />
             </View>
 
@@ -119,6 +170,33 @@ const Settings = () => {
             <Button 
               buttonStyle={Styles.settingsButton}  
               title='Salvar'
+              onPress={() => {
+                putSetting(setting.gardenId, setting.isAutomatic, setting.minimumMoisture, setting.maximumMoisture, setting.minimumTemperature, setting.maximumTemperature)
+                  .then(() => {
+                    putGarden(garden.id, garden.userId, garden.moistureStatus, garden.temperatureStatus, garden.name, garden.description)
+                      .then(() => {
+                        putUser(user.id, user.name, user.email, user.password, user.salt)
+                          .then(() => {
+                            props.navigation.reset({
+                              index : 0,
+                              routes : [{
+                                  name: 'principal'
+                              }]
+                            })
+                          })
+                          .catch((error) => {
+                            console.log(error)
+                            Alert.alert("Erro", "Erro ao atualizar o usuário")
+                          })
+                      })
+                      .catch((error) => {
+                        Alert.alert("Error", "Erro ao atualizar a horta")
+                      })
+                  })
+                  .catch((error) => {
+                    Alert.alert("Erro", "Erro ao atualizar as configurações")
+                  })
+              }}
             />
             <Text style={Styles.settinsCopyright}>
               {'\u00A9'} 2020-2021 OrionSolutions, Inc.

@@ -54,11 +54,15 @@ export const postGarden = (name, description, userId, moistureStatus = 3, temper
  * @param {string} description 
  * @returns 
  */
-export const putGarden = (name, description) => {
+export const putGarden = (id, userId, moistureStatus, temperatureStatus, name, description) => {
     return axios({
         url: URL_GARDEN_API,
         method: 'put',
         data: {
+            id,
+            userId,
+            moistureStatus,
+            temperatureStatus,
             name,
             description
         }

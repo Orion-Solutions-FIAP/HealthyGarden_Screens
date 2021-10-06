@@ -61,6 +61,7 @@ const Login = (props) => {
       const payload = jwtDecode(token)
       getUserEmail(payload.email)
         .then((response) => {
+          saveToken(token)
           saveUserId(response.data.id)
           redirect()
         })

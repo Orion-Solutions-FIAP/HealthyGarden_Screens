@@ -3,12 +3,13 @@ const axios = require("axios")
 const URL_USER_API = "https://healthygardenapi.azurewebsites.net/api/User"
 
 /**
- * Lista os usuários
+ * Recupera um usuário pelo id
+ * @param {int} id 
  * @returns 
  */
-export const getUser = () => {
+export const getUser = (id) => {
     return axios({
-        url: URL_USER_API + '',
+        url: URL_USER_API + '/' + id,
         method: 'get'
     })
 }
@@ -39,14 +40,16 @@ export const postUser = (name, email, password) => {
  * @param {string} password 
  * @returns 
  */
-export const putUser = (name, email, password) => {
+export const putUser = (id,name, email, password, salt) => {
     return axios({
         url: URL_USER_API,
         method: 'put',
         data: {
+            id,
             name,
             email,
-            password
+            password,
+            salt
         }
     })
 }

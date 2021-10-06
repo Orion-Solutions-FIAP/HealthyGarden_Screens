@@ -1,5 +1,5 @@
 const axios = require("axios")
-const URL_SETTING_API = 'http://10.0.0.107:44320/api/Setting'
+const URL_SETTING_API = 'https://healthygardenapi.azurewebsites.net/api/Setting'
 
 /**
  * Recupera as configurações de uma horta pelo id
