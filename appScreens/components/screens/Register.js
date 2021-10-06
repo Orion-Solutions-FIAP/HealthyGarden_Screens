@@ -15,7 +15,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LeafIcon from '../elements/LeafMenuIcon';
 import { ScreenStackHeaderBackButtonImage } from 'react-native-screens';
-import { postUser } from '../services/UserServices';
+import { postUser, getUserEmail } from '../services/UserServices';
 
 import Styles from '../elements/Styles';
 
@@ -57,15 +57,19 @@ const Register = (props) => {
 
     const register = () => {
       if(validate()) {
-        postUser(name,email,password)
-          .then(() => {
-            Alert.alert("Sucesso", "Usuário cadastrado com sucesso")
-            props.navigation.navigate("login")
-          })
-          .catch((err) => {
-            console.log(err)
-            Alert.alert("Erro", "Não foi possível cadastrar")
-          })
+        getUserEmail(email)
+          .then(() => Alert.alert("Erro", "Email já cadastrado"))
+          .catch(() => {
+            postUser(name,email,password)
+              .then(() => {
+                Alert.alert("Sucesso", "Usuário cadastrado com sucesso")
+                props.navigation.navigate("login")
+              })
+              .catch((err) => {
+                console.log(err)
+                Alert.alert("Erro", "Não foi possível cadastrar")
+              })
+          })   
       }
     }
 
