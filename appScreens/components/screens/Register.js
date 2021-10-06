@@ -81,7 +81,7 @@ const Register = (props) => {
 
           <Input 
             inputStyle={Styles.registerInput}
-            label="Name" 
+            label="Nome" 
             labelStyle={Styles.registerLabel} 
             onChangeText={(value) => setName(value) }
           />
@@ -103,7 +103,7 @@ const Register = (props) => {
 
           <Input 
             inputStyle={Styles.registerInput}
-            label="Repeat password" 
+            label="Repetir password" 
             labelStyle={Styles.registerLabel} 
             onChangeText={(value) => setRepeatPassword(value) }
             secureTextEntry={true}
@@ -111,7 +111,7 @@ const Register = (props) => {
 
           <Button 
             type="outline" 
-            title="Register here" 
+            title="Cadastrar" 
             titleStyle={Styles.registerButtonTitle} 
             buttonStyle={Styles.registerButton}
             onPress={() => register() }

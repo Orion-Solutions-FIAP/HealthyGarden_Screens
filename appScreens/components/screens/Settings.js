@@ -114,7 +114,7 @@ const Settings = () => {
           <View style={Styles.settingsViewButton}>
             <Button 
               buttonStyle={Styles.settingsButton}  
-              title='Save'
+              title='Salvar'
             />
             <Text style={Styles.settinsCopyright}>
               {'\u00A9'} 2020-2021 OrionSolutions, Inc.

@@ -14,7 +14,7 @@ export const saveToken = async (token, callback = null) => {
 }
 
 /**
- * remove um token no banco.
+ * Remove um token no banco.
  * @param {function} callback 
  */
 export const removeToken = async (callback = null) => {
@@ -25,6 +25,10 @@ export const removeToken = async (callback = null) => {
     }
 }
 
+/**
+ * Recupera um token do banco
+ * @param {function} callback 
+ */
 export const getToken = async (callback = null) => {
     try {
         await AsyncStorage.getItem('token', callback)
@@ -34,6 +38,11 @@ export const getToken = async (callback = null) => {
     }
 }
 
+/**
+ * Salva um userId no banco
+ * @param {int} userId 
+ * @param {function} callback 
+ */
 export const saveUserId = async (userId, callback = null) => {
     try {
         const obj = JSON.stringify(userId)
@@ -43,6 +52,10 @@ export const saveUserId = async (userId, callback = null) => {
     }
 }
 
+/**
+ * Remove um userId do banco
+ * @param {function} callback 
+ */
 export const removeUserId = async (callback = null) => {
     try{
         await AsyncStorage.removeItem('userId', callback)
@@ -51,6 +64,10 @@ export const removeUserId = async (callback = null) => {
     }
 }
 
+/**
+ * Resgata um userId do banco
+ * @param {function} callback 
+ */
 export const getUserId = async (callback = null) => {
     try{
         await AsyncStorage.getItem('userId', callback)
@@ -58,3 +75,4 @@ export const getUserId = async (callback = null) => {
         throw new Error('Não foi possivel recuperar o userId!')
     }
 }
+

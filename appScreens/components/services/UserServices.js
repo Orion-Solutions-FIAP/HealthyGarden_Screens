@@ -2,6 +2,10 @@ const axios = require("axios")
 
 const URL_USER_API = "https://healthygardenapi.azurewebsites.net/api/User"
 
+/**
+ * Lista os usuários
+ * @returns 
+ */
 export const getUser = () => {
     return axios({
         url: URL_USER_API + '',
@@ -9,6 +13,13 @@ export const getUser = () => {
     })
 }
 
+/**
+ * Cadastra um usuário
+ * @param {string} name 
+ * @param {string} email 
+ * @param {string} password 
+ * @returns 
+ */
 export const postUser = (name, email, password) => {
     return axios({
         url: URL_USER_API,
@@ -21,6 +32,13 @@ export const postUser = (name, email, password) => {
     })
 }
 
+/**
+ * Atualiza um usuário no banco
+ * @param {string} name 
+ * @param {string} email 
+ * @param {string} password 
+ * @returns 
+ */
 export const putUser = (name, email, password) => {
     return axios({
         url: URL_USER_API,
@@ -33,6 +51,11 @@ export const putUser = (name, email, password) => {
     })
 }
 
+/**
+ * Remove um usuário do banco
+ * @param {int} userId 
+ * @returns 
+ */
 export const deleteUser = (userId) => {
     return axios({
         url: URL_USER_API + '/' + userId,
@@ -40,6 +63,12 @@ export const deleteUser = (userId) => {
     })
 }
 
+/**
+ * Realiza o login da aplicação
+ * @param {string} email 
+ * @param {string} password 
+ * @returns 
+ */
 export const login = async (email, password) => {
   return axios({
     url: URL_USER_API + '/login',
@@ -51,6 +80,11 @@ export const login = async (email, password) => {
   })
 }
 
+/**
+ * Recupera um usuário pelo e-mail
+ * @param {string} email 
+ * @returns 
+ */
 export const getUserEmail = (email) => {
   return axios({
       url: URL_USER_API + '/' + email,
