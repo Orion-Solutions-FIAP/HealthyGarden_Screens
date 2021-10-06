@@ -20,7 +20,7 @@ import PlantIcon from '../elements/PlantIcon'
 import StatusCard from '../elements/StatusCard'
 import Styles from '../elements/Styles'
 import ThermometerIcon from '../elements/ThermometerIcon'
-import { getToken } from '../database/DB'
+import { getToken, getUserId } from '../database/DB'
 import { getUserEmail } from '../services/UserServices'
 import { getGarden, getGardenByIdUser } from '../services/GardenServices'
 import jwtDecode from 'jwt-decode'
@@ -68,9 +68,10 @@ const Principal = (props) => {
 
   useEffect(() => {
       setDidMount(true)
-      getToken((error, success) => {
+      getUserId((error, success) => {
           if( !error && success && success.trim().length > 0 ) {
-              getGardenById(16)
+              const id = JSON.parse(success)
+              getGardenById(id)
           }
       })
       return () => setDidMount(false);

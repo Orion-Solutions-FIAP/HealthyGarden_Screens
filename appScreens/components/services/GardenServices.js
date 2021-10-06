@@ -16,7 +16,7 @@ export const getGardenByIdUser = (idUser) => {
     })
 }
 
-export const postGarden = (name, description, userId = 16, moistureStatus = 3, temperatureStatus = 3) => {
+export const postGarden = (name, description, userId, moistureStatus = 3, temperatureStatus = 3) => {
     return axios({
         url: URL_GARDEN_API,
         method: 'post',

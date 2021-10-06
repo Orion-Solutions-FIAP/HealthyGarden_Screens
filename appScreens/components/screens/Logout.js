@@ -1,6 +1,6 @@
 import React from 'react'
 import { Alert, View } from 'react-native'
-import { removeToken } from '../database/DB'
+import { removeToken, removeUserId } from '../database/DB'
 
 
 const Logout = ({navigation}) => {
@@ -11,7 +11,7 @@ const Logout = ({navigation}) => {
             'Quer realmente sair ?',
             [
                 {text: 'Sim', onPress: () => (
-                    removeToken((error) => {
+                    removeUserId((error) => {
                         if(!error){
                             navigation.reset({
                                 index:1,

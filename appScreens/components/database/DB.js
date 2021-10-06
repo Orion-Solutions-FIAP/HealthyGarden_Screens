@@ -33,3 +33,28 @@ export const getToken = async (callback = null) => {
 
     }
 }
+
+export const saveUserId = async (userId, callback = null) => {
+    try {
+        const obj = JSON.stringify(userId)
+        await AsyncStorage.setItem('userId', obj, callback)
+    } catch (error) {
+        throw new Error('Não foi possivel salvar o userId!')
+    }
+}
+
+export const removeUserId = async (callback = null) => {
+    try{
+        await AsyncStorage.removeItem('userId', callback)
+    } catch (error){
+        throw new Error('Não foi possivel apagar o userId!')
+    }
+}
+
+export const getUserId = async (callback = null) => {
+    try{
+        await AsyncStorage.getItem('userId', callback)
+    } catch (error){
+        throw new Error('Não foi possivel recuperar o userId!')
+    }
+}
