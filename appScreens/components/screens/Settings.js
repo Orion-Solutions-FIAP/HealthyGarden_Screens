@@ -22,20 +22,14 @@ import { getSetting, putSetting } from '../services/SettingServices'
 import { getGardenByIdUser, putGarden} from '../services/GardenServices'
 import { getUser, putUser } from '../services/UserServices'
 import { getUserId } from '../database/DB'
-import { stringLiteral } from '@babel/types'
+import { PROPERTY_TYPES, stringLiteral } from '@babel/types'
+import { useLinkProps } from '@react-navigation/native'
 
-const Settings = () => {
-
-    const[change, setChange] = useState(true)
+const Settings = (props) => {
     
     const[user, setUser] = useState({})
     const[garden, setGarden] = useState({})
     const[setting, setSetting] = useState({})
-    
-    const[minTemp, setMinTemp] = useState(0)
-    const[maxTemp, setMaxTemp] = useState(0)
-    const[minHum, setMinHum] = useState(0)
-    const[maxHum, setMaxHum] = useState(0)
 
     useEffect(() => {
       getUserId((error, success) => {
@@ -116,7 +110,13 @@ const Settings = () => {
             <View style={Styles.settingsInputsTemp}>
               
               <InputMinMax
-                onChangeText={(txt) => setSetting(prevState => ({...prevState,minimumTemperature: parseInt(txt)}))} 
+                onChangeText={(txt) => {
+                  if(!Number.isNaN(parseInt(txt))){
+                    setSetting(prevState => ({...prevState,minimumTemperature: parseInt(txt)}))
+                  } else {
+                    setSetting(prevState => ({...prevState, minimumTemperature: 0}))
+                  }
+                }}
                 placeholder='°C' 
                 title='Temp. Min' 
                 value={String(setting.minimumTemperature)} 
@@ -124,8 +124,12 @@ const Settings = () => {
               
               <InputMinMax 
                 onChangeText={(txt) => {
-                  if(!txt)
-                    setSetting(prevState => ({...prevState,maximumTemperature: parseInt(txt)}))}}
+                  if(!Number.isNaN(parseInt(txt))){
+                    setSetting(prevState => ({...prevState,maximumTemperature: parseInt(txt)}))
+                  } else {
+                    setSetting(prevState => ({...prevState, maximumTemperature: 0}))
+                  }
+                }}  
                 placeholder='°C' 
                 title='Temp. Máx' 
                 value={String(setting.maximumTemperature)}
@@ -135,13 +139,25 @@ const Settings = () => {
           
             <View style={Styles.settingsInputsUmd}>
               <InputMinMax 
-                onChangeText={(txt) => setSetting(prevState => ({...prevState, minimumMoisture: parseInt(txt)}))}
+                onChangeText={(txt) => {
+                  if(!Number.isNaN(parseInt(txt))){
+                    setSetting(prevState => ({...prevState,minimumMoisture: parseInt(txt)}))
+                  } else {
+                    setSetting(prevState => ({...prevState, minimumMoisture: 0}))
+                  }
+                }} 
                 placeholder='%' 
                 title='Umd. Min' 
                 value={String(setting.minimumMoisture)}
               />
               <InputMinMax 
-                onChangeText={(txt) => setSetting(prevState => ({...prevState, maximumMoisture: parseInt(txt)}))}
+                onChangeText={(txt) => {
+                  if(!Number.isNaN(parseInt(txt))){
+                    setSetting(prevState => ({...prevState,maximumMoisture: parseInt(txt)}))
+                  } else {
+                    setSetting(prevState => ({...prevState, maximumMoisture: 0}))
+                  }
+                }} 
                 placeholder='%' 
                 title='Umd. Máx' 
                 value={String(setting.maximumMoisture)}
@@ -154,7 +170,33 @@ const Settings = () => {
             <Button 
               buttonStyle={Styles.settingsButton}  
               title='Salvar'
-              onPress={() => {console.log(setting)}}
+              onPress={() => {
+                putSetting(setting.gardenId, setting.isAutomatic, setting.minimumMoisture, setting.maximumMoisture, setting.minimumTemperature, setting.maximumTemperature)
+                  .then(() => {
+                    putGarden(garden.id, garden.userId, garden.moistureStatus, garden.temperatureStatus, garden.name, garden.description)
+                      .then(() => {
+                        putUser(user.id, user.name, user.email, user.password, user.salt)
+                          .then(() => {
+                            props.navigation.reset({
+                              index : 0,
+                              routes : [{
+                                  name: 'principal'
+                              }]
+                            })
+                          })
+                          .catch((error) => {
+                            console.log(error)
+                            Alert.alert("Erro", "Erro ao atualizar o usuário")
+                          })
+                      })
+                      .catch((error) => {
+                        Alert.alert("Error", "Erro ao atualizar a horta")
+                      })
+                  })
+                  .catch((error) => {
+                    Alert.alert("Erro", "Erro ao atualizar as configurações")
+                  })
+              }}
             />
             <Text style={Styles.settinsCopyright}>
               {'\u00A9'} 2020-2021 OrionSolutions, Inc.

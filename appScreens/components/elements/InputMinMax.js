@@ -20,7 +20,7 @@ const InputMinMax = (props) =>{
             
             <TextInput 
               keyboardType='numeric' 
-              maxLength={3} 
+              maxLength={2} 
               onChangeText={(txt) => props.onChangeText(txt)} 
               placeholder={props.placeholder} 
               style={Styles.inputMinMax_input} 

@@ -40,14 +40,16 @@ export const postUser = (name, email, password) => {
  * @param {string} password 
  * @returns 
  */
-export const putUser = (name, email, password) => {
+export const putUser = (id,name, email, password, salt) => {
     return axios({
         url: URL_USER_API,
         method: 'put',
         data: {
+            id,
             name,
             email,
-            password
+            password,
+            salt
         }
     })
 }
