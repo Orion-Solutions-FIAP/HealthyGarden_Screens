@@ -1,14 +1,27 @@
 const axios = require("axios")
 const URL_SETTING_API = 'http://10.0.0.107:44320/api/Setting'
 
-
-export const getSetting = () => {
+/**
+ * Recupera as configurações de uma horta pelo id
+ * @param {int} gardenId 
+ * @returns 
+ */
+export const getSetting = (gardenId) => {
     return axios({
-        url: URL_SETTING_API + '/1',
+        url: URL_SETTING_API + '/' + gardenId,
         method: 'get'
     })
 }
 
+/**
+ * Cadastra as configurações du muma horta
+ * @param {bool} isAutomatic 
+ * @param {int} minimumMoisture 
+ * @param {int} maximumMoisture 
+ * @param {int} minimumTemperature 
+ * @param {int} maximumTemperature 
+ * @returns 
+ */
 export const postSetting = (isAutomatic, minimumMoisture, maximumMoisture, minimumTemperature, maximumTemperature) => {
     return axios({
         url: URL_SETTING_API,
@@ -23,7 +36,16 @@ export const postSetting = (isAutomatic, minimumMoisture, maximumMoisture, minim
     })
 }
 
-
+/**
+ * Atualiza as configurações da horta
+ * @param {int} gardenId 
+ * @param {bool} isAutomatic 
+ * @param {int} minimumMoisture 
+ * @param {int} maximumMoisture 
+ * @param {int} minimumTemperature 
+ * @param {int} maximumTemperature 
+ * @returns 
+ */
 export const putSetting = (gardenId, isAutomatic, minimumMoisture, maximumMoisture, minimumTemperature, maximumTemperature) => {
     return axios({
         url: URL_SETTING_API,
@@ -39,6 +61,11 @@ export const putSetting = (gardenId, isAutomatic, minimumMoisture, maximumMoistu
     })
 }
 
+/**
+ * Remove as configurações de uma horta
+ * @param {int} settingId 
+ * @returns 
+ */
 export const deleteSetting = (settingId) => {
     return axios({
         url: URL_SETTING_API + "/" + settingId,
