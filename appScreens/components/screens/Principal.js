@@ -45,7 +45,7 @@ const Principal = (props) => {
   const [numberTemp, setNumberTemp] = useState(0)
   const [numberHumi, setNumberHumi] = useState(0)
   const [minHumi, setMinHumi] = useState(0)
-  const [isAuthomatic, setIsAuthomatic] = useState(false)
+  const [isAutomatic, setIsAutomatic] = useState(false)
   const [didMount, setDidMount] = useState(false); 
 
   //const {idUser} = props.route.params
@@ -69,7 +69,7 @@ const Principal = (props) => {
         getSetting(response.data.id)
           .then((response) => {
             setMinHumi(response.data.minimumMoisture)
-            setIsAuthomatic(response.data.isAutomatic)
+            setIsAutomatic(response.data.isAutomatic)
           })
           .catch((error) => {
             Alert.alert("Erro", "Não foi possivel resgatar as configurações")
@@ -90,7 +90,7 @@ const Principal = (props) => {
         setIsWatering(false)
         console.log("Fechei")
       })
-    }, 5000)
+    }, 2000)
   }
 
   useEffect(() => {
@@ -105,7 +105,7 @@ const Principal = (props) => {
   }, [])
 
   useEffect(() => {
-    if(humidity < minHumi && isAuthomatic && !isWatering){
+    if(humidity < minHumi && isAutomatic && !isWatering){
       watering()
     }
   }, [humidity])
@@ -168,20 +168,10 @@ const Principal = (props) => {
             buttonStyle={Styles.principalButton}
             containerStyle={Styles.principalButtonContainer}
             onPress={() => {
-              console.log("Umidade Atual: " + humidity)
-              console.log("Umidade Minima: " + minHumi)
-              console.log("Automatico: " + isAuthomatic)
-              watering()}}
-            title='Regar'/>
-
-          <Button
-            buttonStyle={Styles.principalButton}
-            containerStyle={Styles.principalButtonContainer}
-            onPress={() => {
-              console.log("Umidade Atual: " + humidity)
-              console.log("Umidade Minima: " + minHumi)
-              console.log("Automatico: " + isAuthomatic)
-              setHumidity(humidity+1)}}
+              if(!isWatering){
+                watering()
+              }
+            }}
             title='Regar'/>
 
         </View>
