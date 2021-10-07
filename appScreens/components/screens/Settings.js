@@ -22,8 +22,6 @@ import { getSetting, putSetting } from '../services/SettingServices'
 import { getGardenByIdUser, putGarden} from '../services/GardenServices'
 import { getUser, putUser } from '../services/UserServices'
 import { getUserId } from '../database/DB'
-import { PROPERTY_TYPES, stringLiteral } from '@babel/types'
-import { useLinkProps } from '@react-navigation/native'
 
 const Settings = (props) => {
     
@@ -59,6 +57,46 @@ const Settings = (props) => {
         }
       })
     },[])
+
+
+    const isValid = () => {
+      if(user.name.trim().length === 0){
+        Alert.alert("Erro", "Nome do usuário é obrigatório")
+        return false
+      }
+
+      if(garden.name.trim().length < 5){
+        Alert.alert("Erro", "Nome da horta tem que ter pelo menos 5 caractéres")
+        return false
+      }
+
+      if(garden.description.trim().length < 10){
+        Alert.alert("Erro", "Descrição da horta tem que ter pelo menos 10 caracteres")
+        return false
+      }
+
+      if(setting.minimumTemperature == 0 || setting.maximumTemperature == 0){
+        Alert.alert("Erro", "Temperaturas mínima e máxima são obrigatórias e maiores que zero")
+        return false
+      }
+
+      if(setting.maximumTemperature < setting.minimumTemperature){
+        Alert.alert("Erro", "Temperatura máxima deve ser maior que a temperatura mínima")
+        return false
+      }
+
+      if(setting.minimumMoisture == 0 || setting.maximumMoisture == 0){
+        Alert.alert("Erro", "Umidades mínima e máxima são obrigatórias e maiores que zero")
+        return false
+      }
+
+      if(setting.maximumMoisture < setting.minimumMoisture){
+        Alert.alert("Erro", "Umidade máxima deve ser maior que a umidade mínima")
+        return false
+      }
+
+      return true
+    }
 
     return(
       <ScrollView>
@@ -171,7 +209,8 @@ const Settings = (props) => {
               buttonStyle={Styles.settingsButton}  
               title='Salvar'
               onPress={() => {
-                putSetting(setting.gardenId, setting.isAutomatic, setting.minimumMoisture, setting.maximumMoisture, setting.minimumTemperature, setting.maximumTemperature)
+                if(isValid()){
+                  putSetting(setting.gardenId, setting.isAutomatic, setting.minimumMoisture, setting.maximumMoisture, setting.minimumTemperature, setting.maximumTemperature)
                   .then(() => {
                     putGarden(garden.id, garden.userId, garden.moistureStatus, garden.temperatureStatus, garden.name, garden.description)
                       .then(() => {
@@ -196,6 +235,7 @@ const Settings = (props) => {
                   .catch((error) => {
                     Alert.alert("Erro", "Erro ao atualizar as configurações")
                   })
+                }
               }}
             />
             <Text style={Styles.settinsCopyright}>
