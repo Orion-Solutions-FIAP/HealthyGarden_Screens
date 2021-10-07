@@ -23,6 +23,7 @@ import ThermometerIcon from '../elements/ThermometerIcon'
 import { getToken, getUserId } from '../database/DB'
 import { getUserEmail } from '../services/UserServices'
 import { getGarden, getGardenByIdUser } from '../services/GardenServices'
+import {getSetting} from '../services/SettingServices'
 import jwtDecode from 'jwt-decode'
 
 const client = MQTT.createClient({
@@ -38,10 +39,13 @@ const Principal = (props) => {
 
   const [temperature, setTemperature] = useState(0)
   const [humidity, setHumidity] = useState(0)
+  const [isWatering, setIsWatering] = useState(false)
 
   const [nameGarden, setNameGarden] = useState('')
   const [numberTemp, setNumberTemp] = useState(0)
   const [numberHumi, setNumberHumi] = useState(0)
+  const [minHumi, setMinHumi] = useState(0)
+  const [isAutomatic, setIsAutomatic] = useState(false)
   const [didMount, setDidMount] = useState(false); 
 
   //const {idUser} = props.route.params
@@ -62,8 +66,31 @@ const Principal = (props) => {
         setNameGarden(response.data.name)
         setNumberHumi(response.data.moistureStatus)
         setNumberTemp(response.data.temperatureStatus)
+        getSetting(response.data.id)
+          .then((response) => {
+            setMinHumi(response.data.minimumMoisture)
+            setIsAutomatic(response.data.isAutomatic)
+          })
+          .catch((error) => {
+            Alert.alert("Erro", "Não foi possivel resgatar as configurações")
+          })
       })
       .catch(() => redirect())
+  }
+
+  const watering = () => {
+    setIsWatering(true)
+    client.then(function(client){
+      client.publish('11FkGoi1g8h6cP8/solenoid/', "0", 0, false)
+      console.log("Abri")
+    })
+    setTimeout(()=>{
+      client.then(function(client){
+        client.publish('11FkGoi1g8h6cP8/solenoid/', "1", 0, false)
+        setIsWatering(false)
+        console.log("Fechei")
+      })
+    }, 2000)
   }
 
   useEffect(() => {
@@ -76,6 +103,12 @@ const Principal = (props) => {
       })
       return () => setDidMount(false);
   }, [])
+
+  useEffect(() => {
+    if(humidity < minHumi && isAutomatic && !isWatering){
+      watering()
+    }
+  }, [humidity])
   
   client.then(function(client) {
     client.on('message', function(msg) {
@@ -130,19 +163,17 @@ const Principal = (props) => {
         />
         
         <View style={Styles.principalViewButtons}>
-        
-          <Button 
-            buttonStyle={Styles.principalButton} 
+
+          <Button
+            buttonStyle={Styles.principalButton}
             containerStyle={Styles.principalButtonContainer}
-            onPress={() => {client.then(function(client){client.publish('11FkGoi1g8h6cP8/solenoid/', "0", 0, false);})}} 
-            title='Abre'
-          /> 
-          <Button 
-            buttonStyle={Styles.principalButton} 
-            containerStyle={Styles.principalButtonContainer}
-            onPress={() => {client.then(function(client){client.publish('11FkGoi1g8h6cP8/solenoid/', "1", 0, false);})}} 
-            title='Fecha' 
-          />
+            onPress={() => {
+              if(!isWatering){
+                watering()
+              }
+            }}
+            title='Regar'/>
+
         </View>
       </SafeAreaView>
     </ScrollView>
