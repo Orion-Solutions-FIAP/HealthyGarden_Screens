@@ -25,6 +25,7 @@ import { getUserEmail } from '../services/UserServices'
 import { getGarden, getGardenByIdUser } from '../services/GardenServices'
 import {getSetting} from '../services/SettingServices'
 import jwtDecode from 'jwt-decode'
+import { postHistoric } from '../services/HistoricServices'
 
 const client = MQTT.createClient({
   uri: 'ws://ioticos.org:1883',
@@ -41,9 +42,12 @@ const Principal = (props) => {
   const [humidity, setHumidity] = useState(0)
   const [isWatering, setIsWatering] = useState(false)
 
+  const [idGarden, setIdGarden] = useState(0)
   const [nameGarden, setNameGarden] = useState('')
   const [numberTemp, setNumberTemp] = useState(0)
   const [numberHumi, setNumberHumi] = useState(0)
+  const [dsTemp, setDsTemp] = useState('')
+  const [dsHumi, setDsHumi] = useState('')
   const [minHumi, setMinHumi] = useState(0)
   const [isAutomatic, setIsAutomatic] = useState(false)
   const [minHumiDay, setMinHumiDay] = useState(100)
@@ -65,9 +69,12 @@ const Principal = (props) => {
   const getGardenById = (idUser) => {
     getGardenByIdUser(idUser)
       .then((response) => {
+        setIdGarden(response.data.id)
         setNameGarden(response.data.name)
         setNumberHumi(response.data.moistureStatus)
         setNumberTemp(response.data.temperatureStatus)
+        setDsHumi(response.data.moistureStatusDescription)
+        setDsTemp(response.data.temperatureStatusDescription)
         getSetting(response.data.id)
           .then((response) => {
             setMinHumi(response.data.minimumMoisture)
@@ -123,6 +130,24 @@ const Principal = (props) => {
     }
     
   }, [temperature])
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      var now = new Date();
+      var hour = now.getHours();
+      if(hour === 17 ){
+        postHistoric(idGarden, now, minHumiDay, maxTempDay)
+          .then(() => {
+            console.log("Histórico cadastrado com sucesso")          
+          })
+          .catch((err) => {
+            console.log(err)
+          }) 
+      }
+    }, 3600000);
+    return () => clearInterval(intervalId);
+  }, [idGarden, minHumiDay, maxTempDay])
+  
   
   client.then(function(client) {
     client.on('message', function(msg) {
@@ -158,7 +183,7 @@ const Principal = (props) => {
         <StatusCard 
           componentIcon={<PlantIcon/>}
           containerColor='#4A9F2C' 
-          statusText={"Sua horta está: " + numberTemp + numberHumi}  
+          statusText={"Sua horta está: " + dsTemp + '/' + dsHumi}  
           textSize = {16} 
         />
 
