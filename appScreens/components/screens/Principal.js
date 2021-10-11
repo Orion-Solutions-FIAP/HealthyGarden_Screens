@@ -46,6 +46,8 @@ const Principal = (props) => {
   const [numberHumi, setNumberHumi] = useState(0)
   const [minHumi, setMinHumi] = useState(0)
   const [isAutomatic, setIsAutomatic] = useState(false)
+  const [minHumiDay, setMinHumiDay] = useState(100)
+  const [maxTempDay, setMaxTempDay] = useState(0)
   const [didMount, setDidMount] = useState(false); 
 
   //const {idUser} = props.route.params
@@ -108,7 +110,19 @@ const Principal = (props) => {
     if(humidity < minHumi && isAutomatic && !isWatering){
       watering()
     }
+
+    if(humidity < minHumiDay){
+      setMinHumiDay(humidity)
+    }
+
   }, [humidity])
+
+  useEffect(() => {
+    if (temperature > maxTempDay){
+      setMaxTempDay(temperature)
+    }
+    
+  }, [temperature])
   
   client.then(function(client) {
     client.on('message', function(msg) {
