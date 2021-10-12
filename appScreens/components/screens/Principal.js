@@ -22,7 +22,7 @@ import Styles from '../elements/Styles'
 import ThermometerIcon from '../elements/ThermometerIcon'
 import { getToken, getUserId } from '../database/DB'
 import { getUserEmail } from '../services/UserServices'
-import { getGarden, getGardenByIdUser } from '../services/GardenServices'
+import { getGarden, getGardenByIdUser, putGarden } from '../services/GardenServices'
 import {getSetting} from '../services/SettingServices'
 import jwtDecode from 'jwt-decode'
 import { postHistoric } from '../services/HistoricServices'
@@ -43,15 +43,21 @@ const Principal = (props) => {
   const [isWatering, setIsWatering] = useState(false)
 
   const [idGarden, setIdGarden] = useState(0)
+  const [idUser, setIdUser] = useState(0)
   const [nameGarden, setNameGarden] = useState('')
-  const [numberTemp, setNumberTemp] = useState(0)
-  const [numberHumi, setNumberHumi] = useState(0)
+  const [dsGarden, setDsGarden] = useState('')
+  const [numberTemp, setNumberTemp] = useState(3)
+  const [numberHumi, setNumberHumi] = useState(3)
   const [dsTemp, setDsTemp] = useState('')
   const [dsHumi, setDsHumi] = useState('')
   const [minHumi, setMinHumi] = useState(0)
+  const [maxHumi, setMaxHumi] = useState(0)
+  const [minTemp, setMinTemp] = useState(0)
+  const [maxTemp, setMaxTemp] = useState(0)
   const [isAutomatic, setIsAutomatic] = useState(false)
   const [minHumiDay, setMinHumiDay] = useState(100)
   const [maxTempDay, setMaxTempDay] = useState(0)
+  const [changeStatus, setChangeStatus] = useState(false)
   const [didMount, setDidMount] = useState(false); 
 
   //const {idUser} = props.route.params
@@ -71,6 +77,7 @@ const Principal = (props) => {
       .then((response) => {
         setIdGarden(response.data.id)
         setNameGarden(response.data.name)
+        setDsGarden(response.data.description)
         setNumberHumi(response.data.moistureStatus)
         setNumberTemp(response.data.temperatureStatus)
         setDsHumi(response.data.moistureStatusDescription)
@@ -78,6 +85,9 @@ const Principal = (props) => {
         getSetting(response.data.id)
           .then((response) => {
             setMinHumi(response.data.minimumMoisture)
+            setMaxHumi(response.data.maximumMoisture)
+            setMinTemp(response.data.minimumTemperature)
+            setMaxTemp(response.data.maximumTemperature)
             setIsAutomatic(response.data.isAutomatic)
           })
           .catch((error) => {
@@ -107,6 +117,7 @@ const Principal = (props) => {
       getUserId((error, success) => {
           if( !error && success && success.trim().length > 0 ) {
               const id = JSON.parse(success)
+              setIdUser(id)
               getGardenById(id)
           }
       })
@@ -122,11 +133,47 @@ const Principal = (props) => {
       setMinHumiDay(humidity)
     }
 
+    if(humidity < minHumi && numberHumi != 1){
+      setNumberHumi(1)
+      setDsHumi('Seco')
+      setChangeStatus(true) 
+    }
+
+    if(humidity > maxHumi && numberHumi != 2){
+      setNumberHumi(2)
+      setDsHumi('Umido') 
+      setChangeStatus(true) 
+    }
+
+    if(humidity <= maxHumi && humidity >= minHumi && numberHumi != 3){
+      setNumberHumi(3)
+      setDsHumi('Neutro')
+      setChangeStatus(true)
+    }
+
   }, [humidity])
 
   useEffect(() => {
     if (temperature > maxTempDay){
       setMaxTempDay(temperature)
+    }
+
+    if(temperature < minTemp && numberTemp != 2){
+      setNumberTemp(2)
+      setDsTemp('Frio')
+      setChangeStatus(true)
+    }
+
+    if(temperature > maxTemp && numberTemp != 1){
+      setNumberTemp(1)
+      setDsTemp('Quente')
+      setChangeStatus(true)
+    }
+
+    if(temperature <= maxTemp && temperature >= minTemp && numberTemp != 3){
+      setNumberTemp(3)
+      setDsTemp('Neutro')
+      setChangeStatus(true)
     }
     
   }, [temperature])
@@ -135,7 +182,7 @@ const Principal = (props) => {
     const intervalId = setInterval(() => {
       var now = new Date();
       var hour = now.getHours();
-      if(hour === 17 ){
+      if(hour === 23 ){
         postHistoric(idGarden, now, minHumiDay, maxTempDay)
           .then(() => {
             console.log("Histórico cadastrado com sucesso")          
@@ -147,6 +194,21 @@ const Principal = (props) => {
     }, 3600000);
     return () => clearInterval(intervalId);
   }, [idGarden, minHumiDay, maxTempDay])
+
+  useEffect(() => { 
+    if(changeStatus){
+      console.log(idGarden, idUser, numberHumi, numberTemp, nameGarden,dsGarden)
+      putGarden(idGarden, idUser, numberHumi, numberTemp, nameGarden,dsGarden)
+        .then((response) => {
+          console.log(response.data)
+        })
+        .catch((error) => {
+          Alert.alert('Error', 'Não foi possível atualizar o status')
+          console.log(error)
+        })
+      setChangeStatus(false)
+    }
+  }, [changeStatus])
   
   
   client.then(function(client) {

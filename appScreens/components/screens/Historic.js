@@ -24,7 +24,6 @@ import { getGardenByIdUser } from '../services/GardenServices'
 
 const Historic = () => {
 
-    const [idGarden, setIdGarden] = useState(0)
     const [dados, setDados] = useState([])
 
     const daysOfWeek = ['Dom', 'Seg','Ter', 'Qua', 'Qui', 'Sex', 'Sab']
@@ -35,22 +34,18 @@ const Historic = () => {
                 const id = JSON.parse(success)
                 getGardenByIdUser(id)
                     .then((response) => {
-                        setIdGarden(response.data.id) 
+                        getHistoricByIdGarden(response.data.id)
+                            .then((response) => {
+                                setDados(response.data)
+                            })
+                            .catch((error) => {
+                                Alert.alert("Erro", "Não foi possivel resgatar o histórico")
+                            })
                     })
                     .catch((error) => Alert.alert("Erro", "Não foi possivel resgatar o id da planta"))
             }         
         })
     }, [])
-
-    useEffect(() => {
-        getHistoricByIdGarden(idGarden)
-            .then((response) => {
-            setDados(response.data)
-        })
-            .catch((error) => {
-            Alert.alert("Erro", "Não foi possivel resgatar o histórico")
-        })
-    }, [idGarden])
     
     return (
         <SafeAreaView style={Styles.principalContainer}>
