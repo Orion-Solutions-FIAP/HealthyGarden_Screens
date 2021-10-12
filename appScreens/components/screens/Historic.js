@@ -1,5 +1,6 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import {
+    Alert,
     SafeAreaView,
     View
 } from 'react-native'
@@ -17,33 +18,37 @@ import{
 
 import LeafMenuIcon from '../elements/LeafMenuIcon'
 import Styles from '../elements/Styles'
-
-const data = {
-    temperature:[
-        {x:"seg",y:24},
-        {x:"ter",y:26},
-        {x:"qua",y:20},
-        {x:"qui",y:25},
-        {x:"sex",y:19},
-        {x:"sab",y:28},
-        {x:"dom",y:30}
-    ],
-    moisture:[
-        {x:"seg",y:60},
-        {x:"ter",y:30},
-        {x:"qua",y:80},
-        {x:"qui",y:12},
-        {x:"sex",y:45},
-        {x:"sab",y:90},
-        {x:"dom",y:32}
-    ]
-}
+import { getHistoricByIdGarden } from '../services/HistoricServices'
+import { getUserId } from '../database/DB'
+import { getGardenByIdUser } from '../services/GardenServices'
 
 const Historic = () => {
+
+    const [dados, setDados] = useState([])
+
+    const daysOfWeek = ['Dom', 'Seg','Ter', 'Qua', 'Qui', 'Sex', 'Sab']
+    
+    useEffect(() => {
+        getUserId((error, success) => {
+            if( !error && success && success.trim().length > 0 ) {
+                const id = JSON.parse(success)
+                getGardenByIdUser(id)
+                    .then((response) => {
+                        getHistoricByIdGarden(response.data.id)
+                            .then((response) => {
+                                setDados(response.data)
+                            })
+                            .catch((error) => {
+                                Alert.alert("Erro", "Não foi possivel resgatar o histórico")
+                            })
+                    })
+                    .catch((error) => Alert.alert("Erro", "Não foi possivel resgatar o id da planta"))
+            }         
+        })
+    }, [])
     
     return (
         <SafeAreaView style={Styles.principalContainer}>
-
             <View style={Styles.homeUpView}>
                 <Header 
                     backgroundColor='#08B662' 
@@ -51,18 +56,22 @@ const Historic = () => {
                 />
                 <VictoryContainer style={{marginTop:40}}>
                     <VictoryChart domain={{y:[0,100]}}>
-                        <VictoryAxis style={{tickLabels:{fill:'#FEFEFE', fontWeight:'bolder'}}}/>
+                        <VictoryAxis style={{tickLabels:{fill:'#FEFEFE', fontWeight:'bolder'}}} tickFormat={x => (daysOfWeek[new Date(x).getDay()])}/>
                         <VictoryAxis dependentAxis style={{tickLabels:{fill:'#FEFEFE', fontWeight:'bolder'}}}/>
                         <VictoryGroup offset={10} >
                             <VictoryBar 
-                                data={data.temperature}
+                                data={dados}
+                                x="irrigationDate"
+                                y="temperature"
                                 style={{
                                     data: {
                                         fill: 'orange'
                                     }
                                 }}/>
                             <VictoryBar 
-                                data={data.moisture}
+                                data={dados}
+                                x="irrigationDate"
+                                y="moisture"
                                 style={{
                                     data: {
                                         fill: '#2C6F9F'
@@ -82,7 +91,7 @@ const Historic = () => {
                             orientation= 'horizontal'
                             data={[
                                 {
-                                    name: 'Temperatura',
+                                    name: 'Temperatura' ,
                                     symbol:{
                                         fill:'orange'
                                     }
