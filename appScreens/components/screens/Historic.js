@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {
     Alert,
-    Text,
     SafeAreaView,
     View
 } from 'react-native'
@@ -20,24 +19,38 @@ import{
 import LeafMenuIcon from '../elements/LeafMenuIcon'
 import Styles from '../elements/Styles'
 import { getHistoricByIdGarden } from '../services/HistoricServices'
+import { getUserId } from '../database/DB'
+import { getGardenByIdUser } from '../services/GardenServices'
 
 const Historic = () => {
 
+    const [idGarden, setIdGarden] = useState(0)
     const [dados, setDados] = useState([])
 
     const daysOfWeek = ['Dom', 'Seg','Ter', 'Qua', 'Qui', 'Sex', 'Sab']
+    
+    useEffect(() => {
+        getUserId((error, success) => {
+            if( !error && success && success.trim().length > 0 ) {
+                const id = JSON.parse(success)
+                getGardenByIdUser(id)
+                    .then((response) => {
+                        setIdGarden(response.data.id) 
+                    })
+                    .catch((error) => Alert.alert("Erro", "Não foi possivel resgatar o id da planta"))
+            }         
+        })
+    }, [])
 
     useEffect(() => {
-        getHistoricByIdGarden(22)
+        getHistoricByIdGarden(idGarden)
             .then((response) => {
             setDados(response.data)
-            console.log(response.data)
         })
             .catch((error) => {
             Alert.alert("Erro", "Não foi possivel resgatar o histórico")
         })
-    }, [])
-
+    }, [idGarden])
     
     return (
         <SafeAreaView style={Styles.principalContainer}>
