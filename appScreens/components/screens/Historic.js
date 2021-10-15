@@ -36,10 +36,11 @@ const Historic = () => {
                     .then((response) => {
                         getHistoricByIdGarden(response.data.id)
                             .then((response) => {
+                                console.log(response.data)
                                 setDados(response.data)
                             })
                             .catch((error) => {
-                                Alert.alert("Erro", "Não foi possivel resgatar o histórico")
+                                console.log("Não foi possível recuperar o histórico")
                             })
                     })
                     .catch((error) => Alert.alert("Erro", "Não foi possivel resgatar o id da planta"))

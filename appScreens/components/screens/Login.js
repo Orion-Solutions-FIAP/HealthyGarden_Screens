@@ -107,15 +107,7 @@ const Login = (props) => {
               value={password} 
             />
 
-            <TouchableOpacity 
-              onPress={() => {props.navigation.navigate("password")}}
-              style={Styles.loginForgotPass}>
-                
-              <Text style={Styles.loginForgotPassText}>
-                Esqueci minha senha
-              </Text>
             
-            </TouchableOpacity>
           </View>
 
           <Button 
@@ -126,19 +118,7 @@ const Login = (props) => {
             type="outline" 
           />
 
-          <TouchableOpacity 
-            onPress={() => props.navigation.navigate("createGarden")}
-            style={Styles.loginMicrosoftButton}>
-            
-            <Image 
-              source={require('../../src/image/icon_microsoft.png')}
-              style={Styles.loginIconMicrosoft} 
-            />
-            
-            <Text style={Styles.loginButtonTitle}>
-              Login with Microsoft 
-            </Text>
-          </TouchableOpacity>
+          
 
         </SafeAreaView>
       

@@ -203,7 +203,6 @@ const Principal = (props) => {
           console.log(response.data)
         })
         .catch((error) => {
-          Alert.alert('Error', 'Não foi possível atualizar o status')
           console.log(error)
         })
       setChangeStatus(false)
